@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://bopo.github.io/2018/04/10/python_fn/</loc>
+    <lastmod>2018-04-10T11:57:24+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://bopo.github.io/2017/05/20/carthage_update/</loc>
     <lastmod>2017-05-20T11:58:06+02:00</lastmod>
   </url>
@@ -64,7 +69,7 @@
   
   <url>
     <loc>https://bopo.github.io/</loc>
-    <lastmod>2017-05-20T11:58:06+02:00</lastmod>
+    <lastmod>2018-04-10T11:57:24+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -87,7 +92,19 @@
   
   <url>
     <loc>https://bopo.github.io/post/</loc>
-    <lastmod>2017-05-20T11:58:06+02:00</lastmod>
+    <lastmod>2018-04-10T11:57:24+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://bopo.github.io/tags/python/</loc>
+    <lastmod>2018-04-10T11:57:24+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://bopo.github.io/categories/python/</loc>
+    <lastmod>2018-04-10T11:57:24+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -106,6 +123,12 @@
   <url>
     <loc>https://bopo.github.io/tags/%E5%85%AB%E5%8D%A6%E4%B8%87%E7%89%A9%E7%B1%BB%E8%B1%A1/</loc>
     <lastmod>2017-05-20T11:58:06+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://bopo.github.io/categories/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</loc>
+    <lastmod>2018-04-10T11:57:24+08:00</lastmod>
     <priority>0</priority>
   </url>
   

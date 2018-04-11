@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on BoPo的备忘录</title>
+    <link>https://bopo.github.io/categories/python/</link>
+    <description>Recent content in Python on BoPo的备忘录</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Tue, 10 Apr 2018 11:57:24 +0800</lastBuildDate>
+    
+	<atom:link href="https://bopo.github.io/categories/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python函数式编程：从入门到走火入魔</title>
+      <link>https://bopo.github.io/2018/04/10/python_fn/</link>
+      <pubDate>Tue, 10 Apr 2018 11:57:24 +0800</pubDate>
+      
+      <guid>https://bopo.github.io/2018/04/10/python_fn/</guid>
+      <description>很多人都在谈论函数式编程（Functional Programming），只是很多人站在不同的角度看到的是完全不一样的风景。坚持实用主义的 Python 老司机们对待 FP 的态度应该更加包容，虽然他们不相信银弹，但冥冥中似乎能感觉到 FP 暗合了 Python 教义（The Zen of Python）的某些思想，而且既然 Python 是一门多范式编程语言，并在很大程度上支持函数式编程，那就更没有理由拒绝它。 函数式编程源自于数学理论，它似乎也更适用于数学计算相关的场景，因此本文以一个简单的数据处理问题为例，逐步介绍 Python 函数式编程从入门到走火入魔的过程。
+ 问题：计算 N 位同学在某份试卷的 M 道选择题上的得分（每道题目的分值不同）。
+ 首先来生成一组用于计算的伪造数据： # @file: data.py import random from collections import namedtuple Student = namedtuple(&#39;Student&#39;, [&#39;id&#39;, &#39;ans&#39;]) N_Questions = 25 N_Students = 20 def gen_random_list(opts, n): return [random.choice(opts) for i in range(n)] # 问题答案 &#39;ABCD&#39; 随机 ANS = gen_random_list(&#39;ABCD&#39;, N_Questions) # 题目分值 1~5 分 SCORE = gen_random_list(range(1,6), N_Questions) QUIZE = zip(ANS, SCORE) students = [ # 学生答案为 &#39;ABCD*&#39; 随机，&#39;*&#39; 代表未作答 Student(_id, gen_random_list(&#39;ABCD*&#39;, N_Questions)) for _id in range(1, N_Students+1) ] print(QUIZE) # [(&#39;A&#39;, 3), (&#39;B&#39;, 1), (&#39;D&#39;, 1), .</description>
+    </item>
+    
+  </channel>
+</rss>

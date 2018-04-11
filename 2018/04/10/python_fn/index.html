@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <title>【 研究帖 】 经典价值投资法 —— 本杰明.格雷厄姆  &middot; BoPo的备忘录</title>
+    <title>Python函数式编程：从入门到走火入魔 &middot; BoPo的备忘录</title>
     <meta name="generator" content="Hugo 0.38.2" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -10,7 +10,7 @@
       <meta name="description" content="">
     
     
-    <link rel="canonical" href="https://bopo.github.io/2017/02/28/nian-shang-qi-yue/"/>
+    <link rel="canonical" href="https://bopo.github.io/2018/04/10/python_fn/"/>
     <link rel="icon" href="https://bopo.github.io/favicon.ico">
     <link rel="apple-touch-icon" href="https://bopo.github.io/apple-touch-icon.png"/>
     <link rel="stylesheet" href="https://bopo.github.io/css/style.css">
@@ -20,21 +20,18 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="【 研究帖 】 经典价值投资法 —— 本杰明.格雷厄姆 " />
-<meta property="og:description" content="经典价值投资策略 由格雷厄姆晚年在一次访谈中提出，被认为是格雷厄姆一生交易经验的最重要总结。 经典价值投资策略共有十条准则组成，这十条准则又可分为价值五法和安全五法
-价值五法(前五条)安全五法(后五条)
- 股票的盈利回报率（市盈率倒数）应大于美国AAA 级债券收益的2 倍。例 如某只股票的市盈率为10 倍，则盈利回报率为10%，如AAA 债券收益率为4%, 则 该只股票的盈利回报率满足条件。 股票的市盈率应小于其过去五年最高市盈率的40%。 股票派息率应大于美国AAA 级债券收益率的2/3. 股价要低于每股有形资产净值的2/3. 股价要低于每股净流动资产（流动资产-流动负债）的2/3.` 总负债要小于有形资产净值。 流动比率（流动资产/流动负债）要大于2 总负债要要小于净流动资产的2倍 过去10 年的平均年化盈利增长率要大于7% 过去十年中不能超过2 次的盈利增长率小于-5%。  方便大家研究每个条件都单独列出附有注释 ^.^
- 注意
-市场不同、时期不同切莫生搬硬套，格雷厄姆自己也认为，可以完全满足这十项准则的公司越来越少了（1976 年，美国），因此只要有股票能同时符合价值五法及安全五法中的任一项，即可视为具备投资价值。
- 参考书籍 《聪明的投资者》 —— 本杰明.格雷厄姆" />
+    <meta property="og:title" content="Python函数式编程：从入门到走火入魔" />
+<meta property="og:description" content="很多人都在谈论函数式编程（Functional Programming），只是很多人站在不同的角度看到的是完全不一样的风景。坚持实用主义的 Python 老司机们对待 FP 的态度应该更加包容，虽然他们不相信银弹，但冥冥中似乎能感觉到 FP 暗合了 Python 教义（The Zen of Python）的某些思想，而且既然 Python 是一门多范式编程语言，并在很大程度上支持函数式编程，那就更没有理由拒绝它。 函数式编程源自于数学理论，它似乎也更适用于数学计算相关的场景，因此本文以一个简单的数据处理问题为例，逐步介绍 Python 函数式编程从入门到走火入魔的过程。
+ 问题：计算 N 位同学在某份试卷的 M 道选择题上的得分（每道题目的分值不同）。
+ 首先来生成一组用于计算的伪造数据： # @file: data.py import random from collections import namedtuple Student = namedtuple(&#39;Student&#39;, [&#39;id&#39;, &#39;ans&#39;]) N_Questions = 25 N_Students = 20 def gen_random_list(opts, n): return [random.choice(opts) for i in range(n)] # 问题答案 &#39;ABCD&#39; 随机 ANS = gen_random_list(&#39;ABCD&#39;, N_Questions) # 题目分值 1~5 分 SCORE = gen_random_list(range(1,6), N_Questions) QUIZE = zip(ANS, SCORE) students = [ # 学生答案为 &#39;ABCD*&#39; 随机，&#39;*&#39; 代表未作答 Student(_id, gen_random_list(&#39;ABCD*&#39;, N_Questions)) for _id in range(1, N_Students&#43;1) ] print(QUIZE) # [(&#39;A&#39;, 3), (&#39;B&#39;, 1), (&#39;D&#39;, 1), ." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://bopo.github.io/2017/02/28/nian-shang-qi-yue/" />
+<meta property="og:url" content="https://bopo.github.io/2018/04/10/python_fn/" />
 
 
 
-<meta property="article:published_time" content="2017-02-28T16:45:28&#43;08:00"/>
+<meta property="article:published_time" content="2018-04-10T11:57:24&#43;08:00"/>
 
-<meta property="article:modified_time" content="2017-02-28T16:45:28&#43;08:00"/>
+<meta property="article:modified_time" content="2018-04-10T11:57:24&#43;08:00"/>
 
 
 
@@ -48,31 +45,25 @@
 
     
     
-<meta itemprop="name" content="【 研究帖 】 经典价值投资法 —— 本杰明.格雷厄姆 ">
-<meta itemprop="description" content="经典价值投资策略 由格雷厄姆晚年在一次访谈中提出，被认为是格雷厄姆一生交易经验的最重要总结。 经典价值投资策略共有十条准则组成，这十条准则又可分为价值五法和安全五法
-价值五法(前五条)安全五法(后五条)
- 股票的盈利回报率（市盈率倒数）应大于美国AAA 级债券收益的2 倍。例 如某只股票的市盈率为10 倍，则盈利回报率为10%，如AAA 债券收益率为4%, 则 该只股票的盈利回报率满足条件。 股票的市盈率应小于其过去五年最高市盈率的40%。 股票派息率应大于美国AAA 级债券收益率的2/3. 股价要低于每股有形资产净值的2/3. 股价要低于每股净流动资产（流动资产-流动负债）的2/3.` 总负债要小于有形资产净值。 流动比率（流动资产/流动负债）要大于2 总负债要要小于净流动资产的2倍 过去10 年的平均年化盈利增长率要大于7% 过去十年中不能超过2 次的盈利增长率小于-5%。  方便大家研究每个条件都单独列出附有注释 ^.^
- 注意
-市场不同、时期不同切莫生搬硬套，格雷厄姆自己也认为，可以完全满足这十项准则的公司越来越少了（1976 年，美国），因此只要有股票能同时符合价值五法及安全五法中的任一项，即可视为具备投资价值。
- 参考书籍 《聪明的投资者》 —— 本杰明.格雷厄姆">
+<meta itemprop="name" content="Python函数式编程：从入门到走火入魔">
+<meta itemprop="description" content="很多人都在谈论函数式编程（Functional Programming），只是很多人站在不同的角度看到的是完全不一样的风景。坚持实用主义的 Python 老司机们对待 FP 的态度应该更加包容，虽然他们不相信银弹，但冥冥中似乎能感觉到 FP 暗合了 Python 教义（The Zen of Python）的某些思想，而且既然 Python 是一门多范式编程语言，并在很大程度上支持函数式编程，那就更没有理由拒绝它。 函数式编程源自于数学理论，它似乎也更适用于数学计算相关的场景，因此本文以一个简单的数据处理问题为例，逐步介绍 Python 函数式编程从入门到走火入魔的过程。
+ 问题：计算 N 位同学在某份试卷的 M 道选择题上的得分（每道题目的分值不同）。
+ 首先来生成一组用于计算的伪造数据： # @file: data.py import random from collections import namedtuple Student = namedtuple(&#39;Student&#39;, [&#39;id&#39;, &#39;ans&#39;]) N_Questions = 25 N_Students = 20 def gen_random_list(opts, n): return [random.choice(opts) for i in range(n)] # 问题答案 &#39;ABCD&#39; 随机 ANS = gen_random_list(&#39;ABCD&#39;, N_Questions) # 题目分值 1~5 分 SCORE = gen_random_list(range(1,6), N_Questions) QUIZE = zip(ANS, SCORE) students = [ # 学生答案为 &#39;ABCD*&#39; 随机，&#39;*&#39; 代表未作答 Student(_id, gen_random_list(&#39;ABCD*&#39;, N_Questions)) for _id in range(1, N_Students&#43;1) ] print(QUIZE) # [(&#39;A&#39;, 3), (&#39;B&#39;, 1), (&#39;D&#39;, 1), .">
 
 
-<meta itemprop="datePublished" content="2017-02-28T16:45:28&#43;08:00" />
-<meta itemprop="dateModified" content="2017-02-28T16:45:28&#43;08:00" />
-<meta itemprop="wordCount" content="33">
+<meta itemprop="datePublished" content="2018-04-10T11:57:24&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-10T11:57:24&#43;08:00" />
+<meta itemprop="wordCount" content="602">
 
 
 
-<meta itemprop="keywords" content="经典价值投资法," />
+<meta itemprop="keywords" content="python," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="【 研究帖 】 经典价值投资法 —— 本杰明.格雷厄姆 "/>
-<meta name="twitter:description" content="经典价值投资策略 由格雷厄姆晚年在一次访谈中提出，被认为是格雷厄姆一生交易经验的最重要总结。 经典价值投资策略共有十条准则组成，这十条准则又可分为价值五法和安全五法
-价值五法(前五条)安全五法(后五条)
- 股票的盈利回报率（市盈率倒数）应大于美国AAA 级债券收益的2 倍。例 如某只股票的市盈率为10 倍，则盈利回报率为10%，如AAA 债券收益率为4%, 则 该只股票的盈利回报率满足条件。 股票的市盈率应小于其过去五年最高市盈率的40%。 股票派息率应大于美国AAA 级债券收益率的2/3. 股价要低于每股有形资产净值的2/3. 股价要低于每股净流动资产（流动资产-流动负债）的2/3.` 总负债要小于有形资产净值。 流动比率（流动资产/流动负债）要大于2 总负债要要小于净流动资产的2倍 过去10 年的平均年化盈利增长率要大于7% 过去十年中不能超过2 次的盈利增长率小于-5%。  方便大家研究每个条件都单独列出附有注释 ^.^
- 注意
-市场不同、时期不同切莫生搬硬套，格雷厄姆自己也认为，可以完全满足这十项准则的公司越来越少了（1976 年，美国），因此只要有股票能同时符合价值五法及安全五法中的任一项，即可视为具备投资价值。
- 参考书籍 《聪明的投资者》 —— 本杰明.格雷厄姆"/>
+<meta name="twitter:title" content="Python函数式编程：从入门到走火入魔"/>
+<meta name="twitter:description" content="很多人都在谈论函数式编程（Functional Programming），只是很多人站在不同的角度看到的是完全不一样的风景。坚持实用主义的 Python 老司机们对待 FP 的态度应该更加包容，虽然他们不相信银弹，但冥冥中似乎能感觉到 FP 暗合了 Python 教义（The Zen of Python）的某些思想，而且既然 Python 是一门多范式编程语言，并在很大程度上支持函数式编程，那就更没有理由拒绝它。 函数式编程源自于数学理论，它似乎也更适用于数学计算相关的场景，因此本文以一个简单的数据处理问题为例，逐步介绍 Python 函数式编程从入门到走火入魔的过程。
+ 问题：计算 N 位同学在某份试卷的 M 道选择题上的得分（每道题目的分值不同）。
+ 首先来生成一组用于计算的伪造数据： # @file: data.py import random from collections import namedtuple Student = namedtuple(&#39;Student&#39;, [&#39;id&#39;, &#39;ans&#39;]) N_Questions = 25 N_Students = 20 def gen_random_list(opts, n): return [random.choice(opts) for i in range(n)] # 问题答案 &#39;ABCD&#39; 随机 ANS = gen_random_list(&#39;ABCD&#39;, N_Questions) # 题目分值 1~5 分 SCORE = gen_random_list(range(1,6), N_Questions) QUIZE = zip(ANS, SCORE) students = [ # 学生答案为 &#39;ABCD*&#39; 随机，&#39;*&#39; 代表未作答 Student(_id, gen_random_list(&#39;ABCD*&#39;, N_Questions)) for _id in range(1, N_Students&#43;1) ] print(QUIZE) # [(&#39;A&#39;, 3), (&#39;B&#39;, 1), (&#39;D&#39;, 1), ."/>
 
     
 
@@ -283,9 +274,9 @@
         
 
         <header class="article-header">
-    <a href="https://bopo.github.io/2017/02/28/nian-shang-qi-yue/">
+    <a href="https://bopo.github.io/2018/04/10/python_fn/">
     <h1 class="article-title" itemprop="name">
-        【 研究帖 】 经典价值投资法 —— 本杰明.格雷厄姆 
+        Python函数式编程：从入门到走火入魔
     </h1>
     </a>
     <div class="article-meta">
@@ -293,12 +284,12 @@
         
         <div class="article-date">
             <i class="fa fa-calendar"></i>
-            <time datetime="2017-02-28 16:45:28 &#43;0800 CST" itemprop="datePublished">2017-02-28</time>
+            <time datetime="2018-04-10 11:57:24 &#43;0800 CST" itemprop="datePublished">2018-04-10</time>
             &middot;
-            33
+            602
             字数
             &middot;
-            1
+            3
             minute read
         </div>
         
@@ -309,7 +300,11 @@
                 <i class="fa fa-folder"></i>
                 
                 
-                <a class="article-category-link" href="https://bopo.github.io/categories/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93">量化交易</a>
+                <a class="article-category-link" href="https://bopo.github.io/categories/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B">函数式编程</a>
                 
                 
             </div>
@@ -323,7 +318,7 @@
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E7%BB%8F%E5%85%B8%E4%BB%B7%E5%80%BC%E6%8A%95%E8%B5%84%E6%B3%95">经典价值投资法</a>
+                <a class="article-category-link" href="https://bopo.github.io/tags/python">python</a>
                 
                 
             </div>
@@ -333,43 +328,248 @@
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            <p>经典价值投资策略 由格雷厄姆晚年在一次访谈中提出，被认为是格雷厄姆一生交易经验的最重要总结。
-经典价值投资策略共有十条准则组成，这十条准则又可分为价值五法和安全五法</p>
+            
 
-<p><code>价值五法(前五条)安全五法(后五条)</code></p>
-
-<ol>
-<li>股票的盈利回报率（市盈率倒数）应大于美国AAA 级债券收益的2 倍。例 如某只股票的市盈率为10 倍，则盈利回报率为10%，如AAA 债券收益率为4%, 则 该只股票的盈利回报率满足条件。</li>
-<li>股票的市盈率应小于其过去五年最高市盈率的40%。</li>
-<li>股票派息率应大于美国AAA 级债券收益率的2/3.</li>
-<li>股价要低于每股有形资产净值的2/3.</li>
-<li>股价要低于每股净流动资产（流动资产-流动负债）的2/3.`</li>
-<li>总负债要小于有形资产净值。</li>
-<li>流动比率（流动资产/流动负债）要大于2</li>
-<li>总负债要要小于净流动资产的2倍</li>
-<li>过去10 年的平均年化盈利增长率要大于7%</li>
-<li>过去十年中不能超过2 次的盈利增长率小于-5%。</li>
-</ol>
-
-<p>方便大家研究每个条件都单独列出附有注释 ^.^</p>
+<p>很多人都在谈论函数式编程（Functional Programming），只是很多人站在不同的角度看到的是完全不一样的风景。坚持实用主义的 Python 老司机们对待 FP 的态度应该更加包容，虽然他们不相信银弹，但冥冥中似乎能感觉到 FP 暗合了 Python 教义（The Zen of Python）的某些思想，而且既然 Python 是一门多范式编程语言，并在很大程度上支持函数式编程，那就更没有理由拒绝它。
+函数式编程源自于数学理论，它似乎也更适用于数学计算相关的场景，因此本文以一个简单的数据处理问题为例，逐步介绍 Python 函数式编程从入门到走火入魔的过程。</p>
 
 <blockquote>
-<p><code>注意</code></p>
-
-<p>市场不同、时期不同切莫生搬硬套，格雷厄姆自己也认为，可以完全满足这十项准则的公司越来越少了（1976 年，美国），因此只要有股票能同时符合价值五法及安全五法中的任一项，即可视为具备投资价值。</p>
+<p>问题：计算 N 位同学在某份试卷的 M 道选择题上的得分（每道题目的分值不同）。</p>
 </blockquote>
 
-<p>参考书籍
-《聪明的投资者》 —— 本杰明.格雷厄姆</p>
+<h4 id="首先来生成一组用于计算的伪造数据">首先来生成一组用于计算的伪造数据：</h4>
+
+<pre><code class="language-python"># @file: data.py
+import random
+from collections import namedtuple
+
+Student = namedtuple('Student', ['id', 'ans'])
+
+N_Questions = 25
+N_Students = 20
+
+def gen_random_list(opts, n):
+    return [random.choice(opts) for i in range(n)]
+
+# 问题答案 'ABCD' 随机
+ANS   = gen_random_list('ABCD', N_Questions)
+# 题目分值 1~5 分
+SCORE = gen_random_list(range(1,6), N_Questions)
+
+QUIZE = zip(ANS, SCORE)
+students = [
+    # 学生答案为 'ABCD*' 随机，'*' 代表未作答
+    Student(_id, gen_random_list('ABCD*', N_Questions))
+    for _id in range(1, N_Students+1)
+]
+
+print(QUIZE)
+# [('A', 3), ('B', 1), ('D', 1), ...
+print(students)
+# [Student(id=1, ans=['C', 'B', 'A', ...
+</code></pre>
+
+<h3 id="入门">入门</h3>
+
+<p>首先来看常规的面向过程编程风格，我们需要遍历每个学生，然后遍历每个学生对每道题目的答案并与真实答案进行比较，然后将正确答案的分数累计：</p>
+
+<pre><code class="language-python">import data
+def normal(students, quize):
+    for student in students:
+        sid = student.id
+        score = 0
+        for i in range(len(quize)):
+            if quize[i][0] == student.ans[i]:
+                score += quize[i][1]
+        print(sid, '\t', score)
+
+print('ID\tScore\n==================')
+normal(data.students, data.quize)
+&quot;&quot;&quot;
+ID    Score
+==================
+1      5
+2      12
+...
+&quot;&quot;&quot;
+</code></pre>
+
+<p>如果你觉得上面的代码非常直观且合乎逻辑，那说明你已经习惯按照计算机的思维模式进行思考了。通过创建嵌套两个 for 循环来遍历所有题目答案的判断和评分，这完全是为计算机服务的思路，虽然说 Python 中的 for 循环已经比 C 语言更进了一步，通常不需要额外的状态变量来记录当前循环的次数，但有时候也不得不使用状态变量，如上例中第二个循环中比较两个列表的元素。函数式编程的一大特点就是尽量抛弃这种明显循环遍历的做法，而是把注意集中在解决问题本身，一如在现实中我们批改试卷时，只需要将两组答案并列进行比较即可：</p>
+
+<pre><code class="language-python">from data import students, QUIZE
+
+student = students[0]
+
+# 将学生答案与正确答案合并到一起
+# 然后过滤出答案一致的题目
+filtered = filter(lambda x: x[0] == x[1][0], zip(student.ans, QUIZE))
+
+print(list(filtered))
+# [('A', ('A', 3)), ('D', ('D', 1)), ...]
+</code></pre>
+
+<p>然后再将所有正确题目的分数累加起来，即可：</p>
+
+<pre><code class="language-python">from functools import reduce
+
+reduced = reduce(lambda x, y: x + y[1][1], filtered, 0)
+print(reduced)以上是对一位学生的结果处理，接下来只需要对所有学生进行同样的处理即可：
+def cal(student):
+    filtered = filter(lambda x: x[0] == x[1][0], zip(student.ans, QUIZE))
+    reduced = reduce(lambda x, y: x + y[1][1], filtered, 0)
+    print(student.id, '\t', reduced)
+
+print('ID\tScore\n==================')
+# 由于 Python 3 中 map 方法只是组合而不直接执行
+# 需要转换成 list 才能将 cal 方法的的结果打印出来
+list(map(cal, students))
+
+&quot;&quot;&quot;
+ID    Score
+==================
+1      5
+2      12
+...
+&quot;&quot;&quot;
+</code></pre>
+
+<p>上面的示例通过 zip/filter/reduce/map 等函数将数据处理的方法打包应用到数据上，实现了基本的函数式编程操作。但是如果你对函数式有更深入的了解，你就会发现上面的 cal 方法中使用了全局变量 QUIZE，这会导致在相同输入的条件下，函数可能产生不同的输出，这是 FP 的大忌，因此需要进行整改：</p>
+
+<pre><code class="language-python">def cal(quize):
+    def inner(student):
+        filtered = filter(lambda x: x[0] == x[1][0], zip(student.ans, quize))
+        reduced = reduce(lambda x, y: x + y[1][1], filtered, 0)
+        print(student.id, '\t', reduced)
+    return inner
+map(cal(QUIZE), students)
+</code></pre>
+
+<p>如此借助闭包（Closure）的方法，就可以维持纯净的 FP 模式啦！</p>
+
+<h3 id="走火-fn-py">走火（fn.py)</h3>
+
+<p>也许看了上面的 FP 写法，你还是觉得挺啰嗦的，并没有达到你想象中的结果，这时候就需要呈上一款语法糖利器：fn.py！fn.py 封装了一些常用的 FP 函数及语法糖，可以大大简化你的代码！
+pip install fn首先从刚刚的闭包开始，我们可以用更加 FP 的方法来解决这一问题，称为柯里化，简单来说就是允许接受多个参数的函数可以分次执行，每次只接受一个参数：</p>
+
+<pre><code class="language-python">from fn.func import curried
+@curried
+def sum5(a, b, c, d, e):
+    return a + b + c + d + e
+
+sum3 = sum5(1,2)
+sum4 = sum3(3,4)
+print(sum4(5))
+# 15应用到上面的 cal 方法中：
+from fn.func import curried
+
+@curried
+def cal(quize, student):
+    filtered = filter(lambda x: x[0] == x[1][0], zip(student.ans, quize))
+    reduced = reduce(lambda x, y: x + y[1][1], filtered, 0)
+    print(student.id, '\t', reduced)
+
+</code></pre>
+
+<p>map(cal(QUIZE), students)在 FP 中数据通常被看作是一段数据流在一串函数的管道中传递，因此上面的reduce和filter其实可以合并：</p>
+
+<pre><code class="language-python">reduce(lambda x, y: x + y[1][1], filter(lambda x: x[0] == x[1][0], zip(student.ans, quize)), 0)
+</code></pre>
+
+<p>虽然更简略了，但是这样会大大降低代码的可读性（这也是 FP 容易遭受批评的一点），为此 fn 提供了更高级的函数操作工具：</p>
+
+<pre><code class="language-python">from fn import F
+
+cal = F() &gt;&gt; (filter, lambda x: x[0]==x[1][0]) &gt;&gt; (lambda r: reduce(_+_[1][1], r, 0))
+# 计算一名学生的成绩
+print(cal(zip(student.ans, QUIZE)))
+
+# 然后组合一下
+@curried
+def output(quize, student):
+    cal = F() &gt;&gt; (filter, lambda x: x[0]==x[1][0]) &gt;&gt; (lambda r: reduce(_+_[1][1], r, 0))
+    print(student.id, '\t', cal(zip(student.ans, quize)))
+map(output(QUIZE), students)
+</code></pre>
+
+<h3 id="入魔-hy">入魔（Hy）</h3>
+
+<p>如果你觉得上面的代码已经足够魔性到看起来不像是 Python 语言了，然而一旦接受了这样的语法设定感觉也还挺不错的。如果你兴冲冲地拿去给 Lisp 或 Haskell 程序员看，则一定会被无情地鄙视😂，于是你痛定思痛下定决心继续挖掘 Python 函数式编程的奥妙，那么恭喜你，组织欢迎你的加入：Hail Hydra！</p>
+
+<p>Hy 是基于 Python 的 Lisp 方言，可以与 Python 代码进行完美互嵌（如果你更偏好 PyPy，同样也有类似的Pixie），除此之外你也可以把它当做一门独立的语言来看待，它有自己的解释器，可以当做独立的脚本语言来使用：</p>
+
+<pre><code class="language-bash">pip install git+https://github.com/hylang/hy.git
+</code></pre>
+
+<p>首先来看一下它的基本用法，和 Python 一样，安装完之后可以通过 <code>hy</code> 命令进入 REPL 环境：</p>
+
+<pre><code>=&gt; (print &quot;Hy!&quot;)
+Hy!
+=&gt; (defn salutationsnm [name] (print (+ &quot;Hy &quot; name &quot;!&quot;)))
+=&gt; (salutationsnm &quot;YourName&quot;)
+Hy YourName!
+</code></pre>
+
+<p>或者当做命令行脚本运行：</p>
+
+<pre><code>#! /usr/bin/env hy
+(print &quot;I was going to code in Python syntax, but then I got Hy.&quot;)
+</code></pre>
+
+<p>保存为 awesome.hy：</p>
+
+<pre><code>chmod +x awesome.hy
+./awesome.hy
+</code></pre>
+
+<p>接下来继续以上面的问题为例，首先可以直接从 Python 代码中导入：</p>
+
+<pre><code class="language-lisp">(import data)
+
+;; 用于 Debug 的自定义宏
+;; 将可迭代对象转化成列表后打印
+(defmacro printlst [it]
+    `(print (list ~it)))
+
+(setv students data.students)
+(setv quize data.QUIZE)
+
+(defn cal [quize]
+  (fn [student]
+    (print student.id
+      (reduce
+        (fn [x y] (+ x (last (last y))))
+        (filter
+          (fn [x] (= (first x) (first (last x))))
+          (zip student.ans quize))
+        0
+      )
+    )
+  )
+)
+
+(printl (map (cal quize) students))
+
+</code></pre>
+
+<p>如果觉得不放心，还可以直接调用最开始定义的方法将结果进行比较：</p>
+
+<pre><code>;; 假设最上面的 normal 方法保存在 fun.py 文件中
+(import fun)
+(.normal fun students quize)
+</code></pre>
+
+<h3 id="总结">总结</h3>
+
+<p>以一个简单的数据处理问题为例，我们经历了 Python 函数式编程从开始尝试到“走火入魔”的整个过程。也许你还是觉得不够过瘾，想要尝试更纯粹的 FP 体验，那么 Haskell 将是你最好的选择。FP 将数据看做数据流在不同函数间传递，省去不必要的中间变量，保证函数的纯粹性…等等这些思想在数据处理过程中还是非常有帮助的（Python 在这一领域的竞争对手 R 语言本身在语法设计上就更多地受到 Lisp 语言的影响，虽然看起来语法也比较奇怪，但这也是它比较适合用于数据处理及统计分析的原因之一）。</p>
 
         </div>
         <footer class="article-footer">
-    <a data-url="https://bopo.github.io/2017/02/28/nian-shang-qi-yue/" data-id="2cdf931b6c925404b3c53c994d30ee2c" class="article-share-link">
+    <a data-url="https://bopo.github.io/2018/04/10/python_fn/" data-id="f0f2a6177c996b3b4b071dcd08086d33" class="article-share-link">
         <i class="fa fa-share"></i>
         分享
     </a>
     
-    <a href="https://bopo.github.io/2017/02/28/nian-shang-qi-yue/#disqus_thread" class="article-comment-link">
+    <a href="https://bopo.github.io/2018/04/10/python_fn/#disqus_thread" class="article-comment-link">
         评论
     </a>
     
@@ -445,14 +645,14 @@
     
 <nav id="article-nav">
     
-
-    
-    <a href="https://bopo.github.io/2017/03/31/%E4%BD%A0%E4%B8%8E%E7%89%9B%E9%80%BC%E4%BA%BA%E5%A3%AB%E4%B9%8B%E9%97%B4%E7%9A%84%E5%B7%AE%E8%B7%9D%E5%B9%B6%E4%B8%8D%E5%8F%AA%E5%9C%A8%E8%83%BD%E5%8A%9B/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="https://bopo.github.io/2017/05/20/carthage_update/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
-          更晚
+          更早
       </strong>
-      <div class="article-nav-title">你与牛逼人士之间的差距，并不只在能力</div>
+      <div class="article-nav-title">macos 下 carthage 升级方法</div>
     </a>
+    
+
     
 </nav>
 
