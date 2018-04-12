@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:updated_time" content="2018-04-10T11:57:24&#43;08:00"/>
+<meta property="og:updated_time" content="2018-04-12T11:29:11&#43;08:00"/>
 
 
 
@@ -175,7 +175,7 @@
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        12
+        13
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -256,6 +256,135 @@
     <section id="main">
     
     
+
+<article class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        </a>
+
+        <header class="article-header">
+    <a href="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/">
+    <h1 class="article-title" itemprop="name">
+        nginx负载均衡的5种策略（转载）
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-04-12 11:29:11 &#43;0800 CST" itemprop="datePublished">2018-04-12</time>
+            &middot;
+            89
+            字数
+            &middot;
+            1
+            minute read
+        </div>
+        
+        
+
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>
+                nginx可以根据客户端IP进行负载均衡，在upstream里设置ip_hash，就可以针对同一个C类地址段中的客户端选择同一个后端服务器，除非那个后端服务器宕了才会换一个。
+nginx的upstream目前支持的5种方式的分配
+1、轮询（默认） 每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。
+upstream backserver { server 192.168.0.14; server 192.168.0.15; }  2、指定权重 weight 指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。
+upstream backserver { server 192.168.0.14 weight=10; server 192.168.0.15 weight=10; }  3、IP绑定 ip_hash 每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。
+upstream backserver { ip_hash; server 192.168.0.14:88; server 192.168.0.15:80; }  4、fair（第三方） 按后端服务器的响应时间来分配请求，响应时间短的优先分配。
+upstream backserver { server server1; server server2; fair; }  5、url_hash（第三方） 按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。
+upstream backserver { server squid1:3128; server squid2:3128; hash $request_uri; hash_method crc32; }  在需要使用负载均衡的server中增加
+proxy_pass http://backserver/; upstream backserver{ ip_hash; server 127.
+            </p>
+            <p class="article-more-link">
+                <a href="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/">
+                    更多
+                </a>
+            </p>
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/" data-id="8aba5719cea20c5f2194ee6cdfc5691d" class="article-share-link">
+        <i class="fa fa-share"></i>
+        分享
+    </a>
+    
+    <a href="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/#disqus_thread" class="article-comment-link">
+        评论
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+</article>
 
 <article class="article article-type-post" itemscope="" itemprop="blogPost">
     <div class="article-inner">
@@ -1623,151 +1752,6 @@
     </div>
 </article>
 
-<article class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        </a>
-
-        <header class="article-header">
-    <a href="https://bopo.github.io/2017/04/01/nian-shang-qi-yue/">
-    <h1 class="article-title" itemprop="name">
-        年上起月法
-    </h1>
-    </a>
-    <div class="article-meta">
-
-        
-        <div class="article-date">
-            <i class="fa fa-calendar"></i>
-            <time datetime="2017-04-01 10:31:57 &#43;0800 CST" itemprop="datePublished">2017-04-01</time>
-            &middot;
-            247
-            字数
-            &middot;
-            2
-            minute read
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">术数</a>
-                
-                
-            </div>
-            
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E6%9C%AF%E6%95%B0">术数</a>
-                
-                
-            </div>
-            
-        
-    </div>
-</header>
-
-        <div class="article-entry" itemprop="articleBody">
-            <p>
-                月年/旬首 甲己 乙庚 丙辛 丁壬 戊癸     正月 丙寅 戊寅 庚寅 壬寅 甲寅   二月 丁卯 己卯 辛卯 癸卯 乙卯   三月 戊辰 庚辰 壬辰 甲辰 丙辰   四月 己巳 辛巳 癸巳 乙巳 丁巳   五月 庚午 壬午 甲午 丙午 戊午   六月 辛未 癸未 乙未 丁未 己未   七月 壬申 甲申 丙申 戊申 庚申   八月 癸酉 乙酉 丁酉 己酉 辛酉   九月 甲戌 丙戌 戊戌 庚戌 壬戌   十月 乙亥 丁亥 己亥 辛亥 癸亥   冬月 丙子 戊子 庚子 壬子 甲子   腊月 丁丑 己丑 辛丑 癸丑 乙丑       时辰/旬首 甲己 乙庚 丙辛 丁壬 戊癸     子 甲子 丙子 戊子 庚子 壬子   丑 乙丑 丁丑 己丑 辛丑 癸丑   寅 丙寅 戊寅 庚寅 壬寅 甲寅   卯 丁卯 己卯 辛卯 癸卯 乙卯   辰 戊辰 庚辰 壬辰 甲辰 丙辰   巳 己巳 辛巳 癸巳 乙巳 丁巳   午 庚午 壬午 甲午 丙午 戊午   未 辛未 癸未 乙未 丁未 己未   申 壬申 甲申 丙申 戊申 庚申   酉 癸酉 乙酉 丁酉 己酉 辛酉   戌 甲戌 丙戌 戊戌 庚戌 壬戌   亥 乙亥 丁亥 己亥 辛亥 癸亥       甲子 甲戌 甲申 甲午 甲辰 甲寅     乙丑 乙亥 乙酉 乙未 乙巳 乙卯   丙寅 丙子 丙戌 丙申 丙午 丙辰   丁卯 丁丑 丁亥 丁酉 丁未 丁巳   戊辰 戊寅 戊子 戊戌 戊申 戊午   己巳 己卯 己丑 己亥 己酉 己未   庚午 庚辰 庚寅 庚子 庚戌 庚申   辛未 辛巳 辛卯 辛丑 辛亥 辛酉   壬申 壬午 壬辰 壬寅 壬子 壬戌   癸酉 癸未 癸巳 癸卯 癸丑 癸亥    六十甲子配五行纳音表 甲子、乙丑，配海中金； 丙寅、丁卯，配炉中火； 戊辰、己巳，配大林木； 庚午、辛未，配路旁土； 壬申、癸酉，配剑锋金； 甲戌、乙亥，配山头火； 丙子、丁丑，配涧下水； 戊寅、己卯，配城墙土； 庚辰、辛巳，配白腊金； 壬午、癸未，配杨柳木； 甲申、乙酉，配泉中水； 丙戌、丁亥，配屋上土； 戊子、己丑，配霹雷火； 庚寅、辛卯，配松柏木； 壬辰、癸巳，配常流水； 甲午、乙未，配沙中金； 丙申、丁酉，配山下火； 戊戌、己亥，配平地木； 庚子、辛丑，配壁上土； 壬寅、癸卯，配金箔金； 甲辰、乙巳，配覆灯火； 丙午、丁未，配天河水； 戊申、己酉，配大驿土； 庚戌、辛亥，配钗钏金； 壬子、癸丑，配桑松木； 甲寅、乙卯，配大溪水； 丙辰、丁巳，配沙中土； 戊午、己未，配天上火； 庚申、辛酉，配石榴木； 壬戌、癸亥，配大海水。
-            </p>
-            <p class="article-more-link">
-                <a href="https://bopo.github.io/2017/04/01/nian-shang-qi-yue/">
-                    更多
-                </a>
-            </p>
-        </div>
-        <footer class="article-footer">
-    <a data-url="https://bopo.github.io/2017/04/01/nian-shang-qi-yue/" data-id="ad88a495ebacca343bbf995a3fbd50df" class="article-share-link">
-        <i class="fa fa-share"></i>
-        分享
-    </a>
-    
-    <a href="https://bopo.github.io/2017/04/01/nian-shang-qi-yue/#disqus_thread" class="article-comment-link">
-        评论
-    </a>
-    
-
-    <script>
-    (function ($) {
-        
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-    </script>
-</footer>
-
-    </div>
-</article>
-
 
 <nav id="page-nav">
 
@@ -1792,6 +1776,23 @@
     </h3>
     <div class="widget">
         <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/" class="title">nginx负载均衡的5种策略（转载）</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-12 11:29:11 &#43;0800 CST" itemprop="datePublished">2018-04-12</time>
+                    </p>
+                </div>
+            </li>
             
             <li>
                 <div class="item-thumbnail">
@@ -1893,32 +1894,6 @@
                     <p class="item-title"><a href="https://bopo.github.io/2017/05/20/yan_bo_diao_sou/" class="title">烟波钓叟赋</a></p>
                     <p class="item-date">
                         <time datetime="2017-05-20 11:58:06 &#43;0200 &#43;0200" itemprop="datePublished">2017-05-20</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://bopo.github.io/2017/05/09/fengshu_huasha/" class="thumbnail">
-                    
-                        <span class="thumbnail-image thumbnail-none"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    
-                    <p class="item-category">
-                        
-                        <a class="article-category-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">
-                        术数
-                        </a>
-                    </p>
-                    
-                    
-                    <p class="item-title"><a href="https://bopo.github.io/2017/05/09/fengshu_huasha/" class="title">常见风水煞的破解方法【转自新浪】</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-05-09 11:58:06 &#43;0200 &#43;0200" itemprop="datePublished">2017-05-09</time>
                     </p>
                 </div>
             </li>
