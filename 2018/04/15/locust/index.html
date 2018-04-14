@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>性能测试：分布式测试 &middot; BoPo的备忘录</title>
+    <meta name="generator" content="Hugo 0.38.2" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="BoPo">
+    
+      <meta name="description" content="">
+    
+    
+    <link rel="canonical" href="https://bopo.github.io/2018/04/15/locust/"/>
+    <link rel="icon" href="https://bopo.github.io/favicon.ico">
+    <link rel="apple-touch-icon" href="https://bopo.github.io/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="https://bopo.github.io/css/style.css">
+    <link rel="stylesheet" href="https://bopo.github.io/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://bopo.github.io/css/monokai.css">
+    <link rel="stylesheet" href="https://bopo.github.io/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="性能测试：分布式测试" />
+<meta property="og:description" content="分布式运行Locust 一旦单台机器不够模拟足够多的用户时，Locust支持运行在多台机器中进行压力测试。
+为了实现这个，你应该在master模式中使用&ndash;master标记来启用一个Locust实例。这个实例将会运行你启动测试的Locust交互网站并查看实时统计数据。master节点的机器自身不会模拟任何用户。相反，你必须使用&ndash;slave标记启动一台到多台Locustslave机器节点，与标记&ndash;master-host一起使用(指出master机器的IP/hostname)。
+常用的做法是在一台独立的机器中运行master，在slave机器中每个处理器内核运行一个slave实例。
+!Note
+master和每一台slave机器，在运行分布式测试时都必须要有locust的测试文件。
+示例 使用master模式启动:
+locust -f my_loucstfile.py --master  在每个slave中执行(使用master机器的IP替换192.168.0.14):
+locust -f my_locustfile.py --slave --master-host=192.168.0.14  参数 --master 设置locust为master模式。网页交互会在这台节点机器中运行。
+--slave 设置locust为slave模式。
+--master-host=X.X.X.X 可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器的IP/hostname(默认设置为127.0.0.1)
+--master-port=5557 可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器中Locust的端口(默认为5557)。注意，locust将会使用这个指定的端口号，同时指定端口&#43;1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。
+--master-bind-host=X.X.X.X 可选项，与&ndash;master一起结合使用。决定在master模式下将会绑定什么网络接口。默认设置为*(所有可用的接口)。
+--master-bind-port=5557 可选项，与--master一起结合使用。决定哪个网络端口master模式将会监听。默认设置为5557。注意Locust会使用指定的端口号，同时指定端口&#43;1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://bopo.github.io/2018/04/15/locust/" />
+
+
+
+<meta property="article:published_time" content="2018-04-15T00:15:33&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-04-15T00:15:33&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="性能测试：分布式测试">
+<meta itemprop="description" content="分布式运行Locust 一旦单台机器不够模拟足够多的用户时，Locust支持运行在多台机器中进行压力测试。
+为了实现这个，你应该在master模式中使用&ndash;master标记来启用一个Locust实例。这个实例将会运行你启动测试的Locust交互网站并查看实时统计数据。master节点的机器自身不会模拟任何用户。相反，你必须使用&ndash;slave标记启动一台到多台Locustslave机器节点，与标记&ndash;master-host一起使用(指出master机器的IP/hostname)。
+常用的做法是在一台独立的机器中运行master，在slave机器中每个处理器内核运行一个slave实例。
+!Note
+master和每一台slave机器，在运行分布式测试时都必须要有locust的测试文件。
+示例 使用master模式启动:
+locust -f my_loucstfile.py --master  在每个slave中执行(使用master机器的IP替换192.168.0.14):
+locust -f my_locustfile.py --slave --master-host=192.168.0.14  参数 --master 设置locust为master模式。网页交互会在这台节点机器中运行。
+--slave 设置locust为slave模式。
+--master-host=X.X.X.X 可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器的IP/hostname(默认设置为127.0.0.1)
+--master-port=5557 可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器中Locust的端口(默认为5557)。注意，locust将会使用这个指定的端口号，同时指定端口&#43;1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。
+--master-bind-host=X.X.X.X 可选项，与&ndash;master一起结合使用。决定在master模式下将会绑定什么网络接口。默认设置为*(所有可用的接口)。
+--master-bind-port=5557 可选项，与--master一起结合使用。决定哪个网络端口master模式将会监听。默认设置为5557。注意Locust会使用指定的端口号，同时指定端口&#43;1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。">
+
+
+<meta itemprop="datePublished" content="2018-04-15T00:15:33&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T00:15:33&#43;08:00" />
+<meta itemprop="wordCount" content="31">
+
+
+
+<meta itemprop="keywords" content="python," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="性能测试：分布式测试"/>
+<meta name="twitter:description" content="分布式运行Locust 一旦单台机器不够模拟足够多的用户时，Locust支持运行在多台机器中进行压力测试。
+为了实现这个，你应该在master模式中使用&ndash;master标记来启用一个Locust实例。这个实例将会运行你启动测试的Locust交互网站并查看实时统计数据。master节点的机器自身不会模拟任何用户。相反，你必须使用&ndash;slave标记启动一台到多台Locustslave机器节点，与标记&ndash;master-host一起使用(指出master机器的IP/hostname)。
+常用的做法是在一台独立的机器中运行master，在slave机器中每个处理器内核运行一个slave实例。
+!Note
+master和每一台slave机器，在运行分布式测试时都必须要有locust的测试文件。
+示例 使用master模式启动:
+locust -f my_loucstfile.py --master  在每个slave中执行(使用master机器的IP替换192.168.0.14):
+locust -f my_locustfile.py --slave --master-host=192.168.0.14  参数 --master 设置locust为master模式。网页交互会在这台节点机器中运行。
+--slave 设置locust为slave模式。
+--master-host=X.X.X.X 可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器的IP/hostname(默认设置为127.0.0.1)
+--master-port=5557 可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器中Locust的端口(默认为5557)。注意，locust将会使用这个指定的端口号，同时指定端口&#43;1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。
+--master-bind-host=X.X.X.X 可选项，与&ndash;master一起结合使用。决定在master模式下将会绑定什么网络接口。默认设置为*(所有可用的接口)。
+--master-bind-port=5557 可选项，与--master一起结合使用。决定哪个网络端口master模式将会监听。默认设置为5557。注意Locust会使用指定的端口号，同时指定端口&#43;1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。"/>
+
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="https://bopo.github.io/" id="logo">
+          
+          <i class="logo" style="background-image: url('https://bopo.github.io/css/images/logo.png')"></i>
+          
+          <span class="site-title">BoPo的备忘录</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="https://bopo.github.io/">首页</a>
+          
+          
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/about/">关于</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="https://bopo.github.io/tags/">标签</a>
+          
+          
+          
+          <a class="main-nav-link" href="https://bopo.github.io/categories/">类别</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://avatars1.githubusercontent.com/u/77651?s=460&amp;v=4"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="搜索">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="https://bopo.github.io/" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="https://bopo.github.io/">首页</a></td>
+          
+          
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/about/">关于</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="https://bopo.github.io/tags/">标签</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="https://bopo.github.io/categories/">类别</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="https://bopo.github.io/" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+      <img id="avatar" src="https://avatars1.githubusercontent.com/u/77651?s=460&amp;v=4">
+      
+      <h2 id="name">BoPo</h2>
+      
+      <span id="location"><i class="fa fa-map-marker"></i>中国</span>
+      
+          <a id="follow" href="https://github.com/bopo">
+              关注
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        16
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          14
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/bopo" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <td><a href="https://bopo.github.io/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+
+        <header class="article-header">
+    <a href="https://bopo.github.io/2018/04/15/locust/">
+    <h1 class="article-title" itemprop="name">
+        性能测试：分布式测试
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-04-15 00:15:33 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+            &middot;
+            31
+            字数
+            &middot;
+            1
+            minute read
+        </div>
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B5%8B%E8%AF%95">分布式测试</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/locust">locust</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/tags/python">python</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+
+<h1 id="分布式运行locust">分布式运行Locust</h1>
+
+<p>一旦单台机器不够模拟足够多的用户时，<code>Locust</code>支持运行在多台机器中进行压力测试。</p>
+
+<p>为了实现这个，你应该在master模式中使用&ndash;master标记来启用一个Locust实例。这个实例将会运行你启动测试的Locust交互网站并查看实时统计数据。master节点的机器自身不会模拟任何用户。相反，你必须使用&ndash;slave标记启动一台到多台Locustslave机器节点，与标记&ndash;master-host一起使用(指出master机器的IP/hostname)。</p>
+
+<p>常用的做法是在一台独立的机器中运行<code>master</code>，在<code>slave</code>机器中每个处理器内核运行一个<code>slave</code>实例。</p>
+
+<p>!Note</p>
+
+<p><code>master</code>和每一台<code>slave</code>机器，在运行分布式测试时都必须要有locust的测试文件。</p>
+
+<h2 id="示例">示例</h2>
+
+<p>使用master模式启动:</p>
+
+<pre><code>locust -f my_loucstfile.py --master
+
+</code></pre>
+
+<p>在每个slave中执行(使用master机器的IP替换192.168.0.14):</p>
+
+<pre><code>locust -f my_locustfile.py --slave --master-host=192.168.0.14
+
+</code></pre>
+
+<h2 id="参数">参数</h2>
+
+<p><code>--master</code>
+设置locust为master模式。网页交互会在这台节点机器中运行。</p>
+
+<p><code>--slave</code>
+设置locust为slave模式。</p>
+
+<p><code>--master-host=X.X.X.X</code>
+可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器的IP/hostname(默认设置为127.0.0.1)</p>
+
+<p><code>--master-port=5557</code>
+可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器中Locust的端口(默认为5557)。注意，locust将会使用这个指定的端口号，同时指定端口+1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。</p>
+
+<p><code>--master-bind-host=X.X.X.X</code>
+可选项，与&ndash;master一起结合使用。决定在master模式下将会绑定什么网络接口。默认设置为<code>*</code>(所有可用的接口)。</p>
+
+<p><code>--master-bind-port=5557</code>
+可选项，与<code>--master</code>一起结合使用。决定哪个网络端口master模式将会监听。默认设置为5557。注意Locust会使用指定的端口号，同时指定端口+1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。</p>
+
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://bopo.github.io/2018/04/15/locust/" data-id="0dbdda59fdcdf7dfe19bb9ba7e209b4e" class="article-share-link">
+        <i class="fa fa-share"></i>
+        分享
+    </a>
+    
+    <a href="https://bopo.github.io/2018/04/15/locust/#disqus_thread" class="article-comment-link">
+        评论
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+
+    
+<nav id="article-nav">
+    
+    <a href="https://bopo.github.io/2018/04/14/python_test_optimization/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          更早
+      </strong>
+      <div class="article-nav-title">Python Django性能测试与优化</div>
+    </a>
+    
+
+    
+    <a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          更晚
+      </strong>
+      <div class="article-nav-title">使用pytest进行测试</div>
+    </a>
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "BoPo" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
+    </section>
+
+   	
+    	<aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        最近
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" class="title">使用pytest进行测试</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-15 00:55:02 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/15/locust/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://bopo.github.io/categories/python">
+                        python
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/15/locust/" class="title">性能测试：分布式测试</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-15 00:15:33 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/14/python_test_optimization/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://bopo.github.io/categories/python">
+                        python
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/14/python_test_optimization/" class="title">Python Django性能测试与优化</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-14 23:37:30 &#43;0800 CST" itemprop="datePublished">2018-04-14</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/" class="title">nginx负载均衡的5种策略（转载）</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-12 11:29:11 &#43;0800 CST" itemprop="datePublished">2018-04-12</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/10/python_fn/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://bopo.github.io/categories/python">
+                        python
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/10/python_fn/" class="title">Python函数式编程：从入门到走火入魔</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-10 11:57:24 &#43;0800 CST" itemprop="datePublished">2018-04-10</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/locust">
+                    locust
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/macos">
+                    macos
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/python">
+                    python
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E4%BC%98%E5%8C%96">
+                    优化
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E4%BC%A0%E7%BB%9F%E6%96%87%E5%8C%96">
+                    传统文化
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B">
+                    函数式编程
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B5%8B%E8%AF%95">
+                    分布式测试
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">
+                    术数
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E6%B5%8B%E8%AF%95">
+                    测试
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E8%A7%A3%E8%AF%BB">
+                    解读
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93">
+                    量化交易
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/carthage">
+                    carthage
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E5%85%AB%E5%8D%A6%E4%B8%87%E7%89%A9%E7%B1%BB%E8%B1%A1">
+                    八卦万物类象
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E5%88%98%E4%BC%AF%E6%B8%A9">
+                    刘伯温
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E5%9C%B0%E7%90%86">
+                    地理
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E5%A5%87%E9%97%A8%E9%81%81%E7%94%B2">
+                    奇门遁甲
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E6%9C%AF%E6%95%B0">
+                    术数
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E7%B1%BB%E8%B1%A1">
+                    类象
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E7%BB%8F%E5%85%B8%E4%BB%B7%E5%80%BC%E6%8A%95%E8%B5%84%E6%B3%95">
+                    经典价值投资法
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E8%80%81%E5%AD%90">
+                    老子
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E8%A7%A3%E5%AF%86">
+                    解密
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E9%98%B4%E9%98%B3">
+                    阴阳
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4">
+                    风水
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4%E5%8C%96%E7%85%9E">
+                    风水化煞
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        标签云
+    </h3>
+    <div class="widget tagcloud">
+        
+        
+        <a href="https://bopo.github.io/tags/carthage" style="font-size: 12px;">carthage</a>
+        
+        
+        <a href="https://bopo.github.io/tags/python" style="font-size: 12px;">python</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E5%85%AB%E5%8D%A6%E4%B8%87%E7%89%A9%E7%B1%BB%E8%B1%A1" style="font-size: 12px;">八卦万物类象</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E5%88%98%E4%BC%AF%E6%B8%A9" style="font-size: 12px;">刘伯温</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E5%9C%B0%E7%90%86" style="font-size: 12px;">地理</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E5%A5%87%E9%97%A8%E9%81%81%E7%94%B2" style="font-size: 12px;">奇门遁甲</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E6%9C%AF%E6%95%B0" style="font-size: 12px;">术数</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E7%B1%BB%E8%B1%A1" style="font-size: 12px;">类象</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E7%BB%8F%E5%85%B8%E4%BB%B7%E5%80%BC%E6%8A%95%E8%B5%84%E6%B3%95" style="font-size: 12px;">经典价值投资法</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E8%80%81%E5%AD%90" style="font-size: 12px;">老子</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E8%A7%A3%E5%AF%86" style="font-size: 12px;">解密</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E9%98%B4%E9%98%B3" style="font-size: 12px;">阴阳</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4" style="font-size: 12px;">风水</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4%E5%8C%96%E7%85%9E" style="font-size: 12px;">风水化煞</a>
+        
+    </div>
+</div>
+
+
+
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018
+      Powered by BoPo.
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://bopo.github.io/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://bopo.github.io/js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+</body>
+</html>

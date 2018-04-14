@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>优化 on BoPo的备忘录</title>
+    <link>https://bopo.github.io/categories/%E4%BC%98%E5%8C%96/</link>
+    <description>Recent content in 优化 on BoPo的备忘录</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sat, 14 Apr 2018 23:37:30 +0800</lastBuildDate>
+    
+	<atom:link href="https://bopo.github.io/categories/%E4%BC%98%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python Django性能测试与优化</title>
+      <link>https://bopo.github.io/2018/04/14/python_test_optimization/</link>
+      <pubDate>Sat, 14 Apr 2018 23:37:30 +0800</pubDate>
+      
+      <guid>https://bopo.github.io/2018/04/14/python_test_optimization/</guid>
+      <description>原文：A Guide to Performance Testing and Optimization With Python and Django 作者：IULIAN GULEA 翻译：雁惊寒
+ 本文通过一个简单的实例一步一步引导读者对其进行全方位的性能优化。以下是译文。
+ &amp;emsp;&amp;emsp;&amp;ensp;唐纳德·克努特（Donald Knuth）曾经说过：“不成熟的优化方案是万恶之源。”然而，任何一个承受高负载的成熟项目都不可避免地需要进行优化。在本文中，我想谈谈优化Web项目代码的五种常用方法。虽然本文是以Django为例，但其他框架和语言的优化原则也是类似的。通过使用这些优化方法，文中例程的查询响应时间从原来的77秒减少到了3.7秒。
+本文用到的例程是从一个我曾经使用过的真实项目改编而来的，是性能优化技巧的典范。如果你想自己尝试着进行优化，可以在GitHub上获取优化前的初始代码，并跟着下文做相应的修改。我使用的是Python 2，因为一些第三方软件包还不支持Python 3。
+示例代码介绍 这个Web项目只是简单地跟踪每个地区的房产价格。因此，只有两种模型：
+# houses/models.py from utils.hash import Hasher class HashableModel(models.Model): &amp;quot;&amp;quot;&amp;quot;Provide a hash property for models.&amp;quot;&amp;quot;&amp;quot; class Meta: abstract = True @property def hash(self): return Hasher.from_model(self) class Country(HashableModel): &amp;quot;&amp;quot;&amp;quot;Represent a country in which the house is positioned.&amp;quot;&amp;quot;&amp;quot; name = models.CharField(max_length=30) def __unicode__(self): return self.name class House(HashableModel): &amp;quot;&amp;quot;&amp;quot;Represent a house with its characteristics.</description>
+    </item>
+    
+  </channel>
+</rss>

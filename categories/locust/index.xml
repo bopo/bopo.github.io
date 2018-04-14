@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Locust on BoPo的备忘录</title>
+    <link>https://bopo.github.io/categories/locust/</link>
+    <description>Recent content in Locust on BoPo的备忘录</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sun, 15 Apr 2018 00:15:33 +0800</lastBuildDate>
+    
+	<atom:link href="https://bopo.github.io/categories/locust/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>性能测试：分布式测试</title>
+      <link>https://bopo.github.io/2018/04/15/locust/</link>
+      <pubDate>Sun, 15 Apr 2018 00:15:33 +0800</pubDate>
+      
+      <guid>https://bopo.github.io/2018/04/15/locust/</guid>
+      <description>分布式运行Locust 一旦单台机器不够模拟足够多的用户时，Locust支持运行在多台机器中进行压力测试。
+为了实现这个，你应该在master模式中使用&amp;ndash;master标记来启用一个Locust实例。这个实例将会运行你启动测试的Locust交互网站并查看实时统计数据。master节点的机器自身不会模拟任何用户。相反，你必须使用&amp;ndash;slave标记启动一台到多台Locustslave机器节点，与标记&amp;ndash;master-host一起使用(指出master机器的IP/hostname)。
+常用的做法是在一台独立的机器中运行master，在slave机器中每个处理器内核运行一个slave实例。
+!Note
+master和每一台slave机器，在运行分布式测试时都必须要有locust的测试文件。
+示例 使用master模式启动:
+locust -f my_loucstfile.py --master  在每个slave中执行(使用master机器的IP替换192.168.0.14):
+locust -f my_locustfile.py --slave --master-host=192.168.0.14  参数 --master 设置locust为master模式。网页交互会在这台节点机器中运行。
+--slave 设置locust为slave模式。
+--master-host=X.X.X.X 可选项，与&amp;ndash;slave一起结合使用，用于设置master模式下的master机器的IP/hostname(默认设置为127.0.0.1)
+--master-port=5557 可选项，与&amp;ndash;slave一起结合使用，用于设置master模式下的master机器中Locust的端口(默认为5557)。注意，locust将会使用这个指定的端口号，同时指定端口+1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。
+--master-bind-host=X.X.X.X 可选项，与&amp;ndash;master一起结合使用。决定在master模式下将会绑定什么网络接口。默认设置为*(所有可用的接口)。
+--master-bind-port=5557 可选项，与--master一起结合使用。决定哪个网络端口master模式将会监听。默认设置为5557。注意Locust会使用指定的端口号，同时指定端口+1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。</description>
+    </item>
+    
+  </channel>
+</rss>

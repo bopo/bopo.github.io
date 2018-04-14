@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:updated_time" content="2018-04-12T11:29:11&#43;08:00"/>
+<meta property="og:updated_time" content="2018-04-15T00:55:02&#43;08:00"/>
 
 
 
@@ -175,7 +175,7 @@
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        13
+        16
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -256,6 +256,457 @@
     <section id="main">
     
     
+
+<article class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        </a>
+
+        <header class="article-header">
+    <a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/">
+    <h1 class="article-title" itemprop="name">
+        使用pytest进行测试
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-04-15 00:55:02 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+            &middot;
+            487
+            字数
+            &middot;
+            3
+            minute read
+        </div>
+        
+        
+
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>
+                简介 pytest:帮助你写出更好的程序：
+ 开源，免费。 升级pytest,严格的向后兼容性。 丰富的第三方插件。 内置assert断言。  环境配置 pip install -U pytest # or easy_install -U pytest  查看版本 py.test --version  也许你已经使用unittest和doctest写了很多的测试用例了，不过你可以直接使用pytest运行他们。
+打印结果 pytest在通过测试时会忽略中间的print信息。要打印则需要assert为false,打印好看用json来格式化下：
+import json print json.dumps(posts_local, indent=4) assert False  也可以使用pprint.pprint()
+pytest fixtures fixture可以声明function,module,fixture。也可以使用xunit的fixture的格式，setup和teardown。使用fixtures作为function的参数使用。
+分类 像unittest有setup和teardown固定装置，pytest扩展了该功能。
+ 模块的固定装置：setup_module/teardown_module 类的固定装置：setup_class/teardown_class 可替代的类级别的固定装置：setup/teardown Module级别方法装置:setup_function Class级别方法装置:setup_method  pytest_fixtrue.py
+def setup_module() def teardown_module() def setup_function() def teardown_funcion() def module_funtion() class class_name: def setup() def teardown() def setup_class() def teardown_class() def setup_method() def teardown_method() def class_function()  运行后，执行顺序：
+            </p>
+            <p class="article-more-link">
+                <a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/">
+                    更多
+                </a>
+            </p>
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" data-id="3c9846c5da636b69e21e896f963cb184" class="article-share-link">
+        <i class="fa fa-share"></i>
+        分享
+    </a>
+    
+    <a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/#disqus_thread" class="article-comment-link">
+        评论
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+</article>
+
+<article class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        </a>
+
+        <header class="article-header">
+    <a href="https://bopo.github.io/2018/04/15/locust/">
+    <h1 class="article-title" itemprop="name">
+        性能测试：分布式测试
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-04-15 00:15:33 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+            &middot;
+            31
+            字数
+            &middot;
+            1
+            minute read
+        </div>
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B5%8B%E8%AF%95">分布式测试</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/locust">locust</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/tags/python">python</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>
+                分布式运行Locust 一旦单台机器不够模拟足够多的用户时，Locust支持运行在多台机器中进行压力测试。
+为了实现这个，你应该在master模式中使用&ndash;master标记来启用一个Locust实例。这个实例将会运行你启动测试的Locust交互网站并查看实时统计数据。master节点的机器自身不会模拟任何用户。相反，你必须使用&ndash;slave标记启动一台到多台Locustslave机器节点，与标记&ndash;master-host一起使用(指出master机器的IP/hostname)。
+常用的做法是在一台独立的机器中运行master，在slave机器中每个处理器内核运行一个slave实例。
+!Note
+master和每一台slave机器，在运行分布式测试时都必须要有locust的测试文件。
+示例 使用master模式启动:
+locust -f my_loucstfile.py --master  在每个slave中执行(使用master机器的IP替换192.168.0.14):
+locust -f my_locustfile.py --slave --master-host=192.168.0.14  参数 --master 设置locust为master模式。网页交互会在这台节点机器中运行。
+--slave 设置locust为slave模式。
+--master-host=X.X.X.X 可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器的IP/hostname(默认设置为127.0.0.1)
+--master-port=5557 可选项，与&ndash;slave一起结合使用，用于设置master模式下的master机器中Locust的端口(默认为5557)。注意，locust将会使用这个指定的端口号，同时指定端口+1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。
+--master-bind-host=X.X.X.X 可选项，与&ndash;master一起结合使用。决定在master模式下将会绑定什么网络接口。默认设置为*(所有可用的接口)。
+--master-bind-port=5557 可选项，与--master一起结合使用。决定哪个网络端口master模式将会监听。默认设置为5557。注意Locust会使用指定的端口号，同时指定端口+1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。
+            </p>
+            <p class="article-more-link">
+                <a href="https://bopo.github.io/2018/04/15/locust/">
+                    更多
+                </a>
+            </p>
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://bopo.github.io/2018/04/15/locust/" data-id="0dbdda59fdcdf7dfe19bb9ba7e209b4e" class="article-share-link">
+        <i class="fa fa-share"></i>
+        分享
+    </a>
+    
+    <a href="https://bopo.github.io/2018/04/15/locust/#disqus_thread" class="article-comment-link">
+        评论
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+</article>
+
+<article class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        </a>
+
+        <header class="article-header">
+    <a href="https://bopo.github.io/2018/04/14/python_test_optimization/">
+    <h1 class="article-title" itemprop="name">
+        Python Django性能测试与优化
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-04-14 23:37:30 &#43;0800 CST" itemprop="datePublished">2018-04-14</time>
+            &middot;
+            875
+            字数
+            &middot;
+            5
+            minute read
+        </div>
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/%E6%B5%8B%E8%AF%95">测试</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/categories/%E4%BC%98%E5%8C%96">优化</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://bopo.github.io/tags/python">python</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>
+                原文：A Guide to Performance Testing and Optimization With Python and Django 作者：IULIAN GULEA 翻译：雁惊寒
+ 本文通过一个简单的实例一步一步引导读者对其进行全方位的性能优化。以下是译文。
+ &emsp;&emsp;&ensp;唐纳德·克努特（Donald Knuth）曾经说过：“不成熟的优化方案是万恶之源。”然而，任何一个承受高负载的成熟项目都不可避免地需要进行优化。在本文中，我想谈谈优化Web项目代码的五种常用方法。虽然本文是以Django为例，但其他框架和语言的优化原则也是类似的。通过使用这些优化方法，文中例程的查询响应时间从原来的77秒减少到了3.7秒。
+本文用到的例程是从一个我曾经使用过的真实项目改编而来的，是性能优化技巧的典范。如果你想自己尝试着进行优化，可以在GitHub上获取优化前的初始代码，并跟着下文做相应的修改。我使用的是Python 2，因为一些第三方软件包还不支持Python 3。
+示例代码介绍 这个Web项目只是简单地跟踪每个地区的房产价格。因此，只有两种模型：
+# houses/models.py from utils.hash import Hasher class HashableModel(models.Model): &quot;&quot;&quot;Provide a hash property for models.&quot;&quot;&quot; class Meta: abstract = True @property def hash(self): return Hasher.from_model(self) class Country(HashableModel): &quot;&quot;&quot;Represent a country in which the house is positioned.&quot;&quot;&quot; name = models.CharField(max_length=30) def __unicode__(self): return self.name class House(HashableModel): &quot;&quot;&quot;Represent a house with its characteristics.
+            </p>
+            <p class="article-more-link">
+                <a href="https://bopo.github.io/2018/04/14/python_test_optimization/">
+                    更多
+                </a>
+            </p>
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://bopo.github.io/2018/04/14/python_test_optimization/" data-id="1419f7d3f8462e5db1af1e2760b36921" class="article-share-link">
+        <i class="fa fa-share"></i>
+        分享
+    </a>
+    
+    <a href="https://bopo.github.io/2018/04/14/python_test_optimization/#disqus_thread" class="article-comment-link">
+        评论
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+</article>
 
 <article class="article article-type-post" itemscope="" itemprop="blogPost">
     <div class="article-inner">
@@ -1291,467 +1742,6 @@ proxy_pass http://backserver/; upstream backserver{ ip_hash; server 127.
     </div>
 </article>
 
-<article class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        </a>
-
-        <header class="article-header">
-    <a href="https://bopo.github.io/2017/04/13/jin-suo-yu-guan-ying-qi/">
-    <h1 class="article-title" itemprop="name">
-        金锁玉关的应期流年判断[转]
-    </h1>
-    </a>
-    <div class="article-meta">
-
-        
-        <div class="article-date">
-            <i class="fa fa-calendar"></i>
-            <time datetime="2017-04-13 11:58:06 &#43;0200 &#43;0200" itemprop="datePublished">2017-04-13</time>
-            &middot;
-            97
-            字数
-            &middot;
-            1
-            minute read
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">术数</a>
-                
-                
-            </div>
-            
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4">风水</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4%E5%8C%96%E7%85%9E">风水化煞</a>
-                
-                
-            </div>
-            
-        
-    </div>
-</header>
-
-        <div class="article-entry" itemprop="articleBody">
-            <p>
-                应期是风水学中的高层次内容。自古以来，很少讲传。我认为，一本书的价值不在于它的厚薄，更主要的是它内容的含金量的多少。所谓应期就是何年何月所发生何事。 风水应期的，说穿了，就是两句话： 1、首先准确判断二十四山各方位上砂水事物的吉凶。 2、吉凶就应在代表该山方位的干或支的流年上，也应在该干或支对冲的年份上。 比如说：西方酉山有灶，则血光之灾就应在酉年或卯年；庚出有砂，则官司斗殴之事应在庚年或甲年，子山有厕所，则破财应在子年或午年，以此类推。 二十四山干支应期包括八十四维十二地支的组成，在风水吉凶的应期断验中，其所表示的意义是不相同的。天干表示表面现象，地支表示实质情况，如今年是&rdquo;辛巳&rdquo;年，&rdquo;辛&rdquo;字上有灶。&rdquo;巳&rdquo;字上有锅炉，则&rdquo;辛&rdquo;砂主今年会破财，&rdquo;巳&rdquo;字主今年发财，形成矛盾，但从实际来看，&rdquo;辛&rdquo;砂主钱财支出（或转借出去，）但不是&rdquo;破&rdquo;或理解为&rdquo;今年收入多发财，但开支或转借他人亦多，自我感觉入不敷出。&rdquo;而&rdquo;巳&rdquo;字是主实际上今年收入较多。 岁月应期，即应事的流年流月，实际上，就是每年每月所应该发生的事情，这里应该全面的判断。 1、干支同断：即干支一起断，就是说在流年吉凶判断中，既要看流年&rdquo;支&rdquo;的宫位吉凶，也要看流年&rdquo;干&rdquo;的宫位吉凶。比如今年是&rdquo;辛巳&rdquo;年，在风水流年头判断时，既要看&rdquo;巳&rdquo;位之砂水吉凶，也要看&rdquo;辛&rdquo;位之砂水吉凶，如果&rdquo;巳&rdquo;位有砂，&rdquo;辛&rdquo;位有水，则主今年一帆风顺，求财得财，求官得官，求子得子，所谋皆遂，但这三者不可能全得，因为有&rdquo;能量转化&rdquo;问题存在。而如果出现了&rdquo;辛&rdquo;位有砂，&rdquo;巳&rdquo;位上有砂，或&rdquo;辛&rdquo;位上有水，&rdquo;巳&rdquo;位上也有水的矛盾情况时，则&rdquo;天干&rdquo;表示表面现象，&rdquo;地支&rdquo;表示实质情况。如&rdquo;辛&rdquo;位上有凶砂，表示今年表面上不顺利。&rdquo;巳&rdquo;位上有吉砂，表示今年实际上很顺利；&rdquo;辛&rdquo;位上有吉水，表示今年表面上很顺利，&rdquo;巳&rdquo;位上有凶水，表示今年实质上很不顺利。 2、戊已年流年断法：这里所说的&rdquo;戊已&rdquo;是指传统风水学所讲的&rdquo;中心点&rdquo;即&rdquo;宅心&rdquo;&ldquo;院心&rdquo;&ldquo;五黄点&rdquo;&ldquo;立极点&rdquo;戊已为中央土，在这一&rdquo;点&rdquo;上，不能有任何人为设置的事物，要顺其自然，地面怎样就应怎样。如果在&rdquo;戊已&rdquo;点上有人工物障，那么凡逢&rdquo;戊已&rdquo;的流年，其人表面上看来都不顺利，实质上顺利与否，要看&rdquo;地支&rdquo;的砂水吉凶而定。如地支&rdquo;寅&rdquo;位上有砂，则主大凶，反之，如&rdquo;黄&rdquo;位有吉水，则主其人&rdquo;戊寅&rdquo;年表面不顺利，实质上很顺利。 3、岁月应期随着距离应期向原点外推进：在风水流年判断中，是否准确，除了要看风水环境（小局）的流年干支砂水吉凶外，还要结合建宅或下葬时间（或搬迁时间）距此流年的时间长短，来考察大局中这个时间段上的流年干支的砂水吉凶情况，根据小局流年干支砂水吉凶情况和大局中流年干支砂水吉凶情况的能量大小来综合决断，这样，才能做到百不失一。我们只要理解了上述流年断法的三点理论，在风水（不论阴宅阳宅）流年的吉凶判断中，就一定会百发百中。《金锁玉关》风水学断流年不准确的问题就会迎刃而解。
-第二节 距离应期断
-距离应期是风水学中千金难买的&rdquo;绝学&rdquo;，因为无人传授，也成了千古之迷。掌握了这个原理，关于宅墓之后人何时出官，何时出灾，何时顺利，何时挫折等人生命运的变化轨迹将历历在目，百无一失。掌握了这一原理，无论其宅墓年代有多么久远，对每代后人的变化情况将能断的百发百中，即哪代人可有富贵，哪代人有大灾大难等等问题都会瞬间解决，而且如民间俗话说的&rdquo;富贵无三代&rdquo;的问题，也可以从风水环境中准确的找到理论上和实践上的答案。总之，距离应期理论，是研习风水者必须要掌握的理论，只有这样才能做到每断必准，所选地址必定吉祥。 距离应期，就是指阳宅从建宅之日起（阴宅指下葬之日起），其各个方位上的砂水吉凶应期，是以宅墓为原点，向二十四山方向，以每年约50米的速度向前推进，时间越长，应事的砂水距离越远。如某坟地，东方有高大山峰距坟约500米，那么该坟之后人老大在该坟建造后约10年左右会发富。 另外，应期时间在山区和平原会有差异，读者应举一反三，勤于实践，灵活运用。
-第三节 流年应期断
-阳宅风水的流年吉凶断法是我和师父刘恒大师多年实践经验的结晶，可能说准确无误，读者可以大胆去验证。一般书市所售的风水书籍都是些只&rdquo;画龙不点晴&rdquo;的东西，许多人苦研一生也不会真正看风水，实在误人子凝。会不会看风水，主要是看你断的准不准，过去、现在、将来，能够和盘托出，就可以称为一个合格的风水师了。 1、单个事物在二十四山方位上对环境的吉凶影响&ndash;这里指在二十四山方位上有某物，就会在某特定的流年发生某些特定的事情。 （1）山所在方位： 子山主男风流好赌，但能发财。 丑山主出邪道之人，破财或耗财。 寅山出主医师僧道或星相之人，破财或耗财。 卯山主能发血光之财，也主男子淫乱。 辰山主发财，也主出不正派之人。 巳山主发财，也出文人。 午山主破财，出风流淫乱之人，事业发展受阻碍。 未山主发财，人丁行为不正。 申山上发财，女儿漂亮美丽。 酉山主口舌官非，血光之灾。 戊山主官司打架斗殴。 亥山主子子不成器。 甲山主发财。 乙山方出文人或文官。 丙山主人女患眼疾，破耗钱财。 丁山主家中有人常年患病。 庚山主官司，斗殴。 辛山主家人易患肝肺之疾。 壬山主发财，女人当家。 癸山主发财，女人当家。 乾山主老人寿短，家长不主事。 坤山主妇健康能干，勤劳致富。 艮山主难生难养男孩，破财。 巽山主妇把持家政，勤劳致富。 （2）水所在方位： 子水主破财耗财。 丑水主发财。 寅水主发财。 卯水主发富而难得子。 辰水主女人有病或风流。 巳水主女人从妓或邪道。 午水主发财，事业顺利。 未水主出盗贼。 申水主女人风流或夭亡。 酉水主发财，但人丁风流易破家。 戌水主易出犯法牢狱之人。 亥水主寿不长。 甲水主贫穷。 乙水主淫乱，乱伦。 丙水主发财。 丁水主出文人才子。 庚水主出军人武官。 辛水主富贵，女儿清丽。 壬水主贫穷破财。 癸水主妇女不易生育。 乾水主出文人，寿命长。 坤水主妇女淫乱或疾病缠身。 艮水主人聪明，出大学生，并能发财。 巽水主女儿风流，易嫁岁数大之人。 （3）山所代表的事物：阳性的，刚健的，如厨房、土堆、烟囱、电杆、铁塔、家具、电视、音响等。 （4）水所代表的事物：阴性的、柔弱的，如厕所、鱼缸、门口、水坑、水管、门、阔地等。 （5）多种事物在不同方位上组合后，对风水的吉凶影响。 （6）多种不同事物在同一方位上组合后对风水的吉凶影响。 上述内容与应期方面我们在面授时将进一步讲传。
-            </p>
-            <p class="article-more-link">
-                <a href="https://bopo.github.io/2017/04/13/jin-suo-yu-guan-ying-qi/">
-                    更多
-                </a>
-            </p>
-        </div>
-        <footer class="article-footer">
-    <a data-url="https://bopo.github.io/2017/04/13/jin-suo-yu-guan-ying-qi/" data-id="192805dbc9eb858d23dfe2d5df41ab6e" class="article-share-link">
-        <i class="fa fa-share"></i>
-        分享
-    </a>
-    
-    <a href="https://bopo.github.io/2017/04/13/jin-suo-yu-guan-ying-qi/#disqus_thread" class="article-comment-link">
-        评论
-    </a>
-    
-
-    <script>
-    (function ($) {
-        
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-    </script>
-</footer>
-
-    </div>
-</article>
-
-<article class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        </a>
-
-        <header class="article-header">
-    <a href="https://bopo.github.io/2017/04/10/shu-shu-fen-lei/">
-    <h1 class="article-title" itemprop="name">
-        周易术数的分类 
-    </h1>
-    </a>
-    <div class="article-meta">
-
-        
-        <div class="article-date">
-            <i class="fa fa-calendar"></i>
-            <time datetime="2017-04-10 09:55:23 &#43;0800 CST" itemprop="datePublished">2017-04-10</time>
-            &middot;
-            8
-            字数
-            &middot;
-            1
-            minute read
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">术数</a>
-                
-                
-            </div>
-            
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E6%9C%AF%E6%95%B0">术数</a>
-                
-                
-            </div>
-            
-        
-    </div>
-</header>
-
-        <div class="article-entry" itemprop="articleBody">
-            <p>
-                命理：禄命法、子平八字、太乙命法、铁板神数、邵子神数、南极神数、紫薇斗数、七政四余等等 相学：麻衣、柳庄、水镜等 风水：峦头（龙穴砂水）、理气（三合、三元、八宅、玄空、天星、纳甲、大卦、金锁玉关等等 择日：天星（七政四余、天元乌兔）、紫白、斗首、奇门、六壬、演禽、八节三奇、禄马贵人、玄空大卦、连山、翰林集要、通书克择（神煞）等 占卜：梅花易数、六爻、太乙、奇门、六壬、金口诀等 占星：果老星宗（七政四余）、演禽、斗数等 预言：推背图、烧饼歌、皇极经世、太乙神数等 此外还有中医、武术、气功、兵家术数（兵谋阵图）、道家法术等等。  
-            </p>
-            <p class="article-more-link">
-                <a href="https://bopo.github.io/2017/04/10/shu-shu-fen-lei/">
-                    更多
-                </a>
-            </p>
-        </div>
-        <footer class="article-footer">
-    <a data-url="https://bopo.github.io/2017/04/10/shu-shu-fen-lei/" data-id="fb6ce736b0b64afd163ad795b48a79c4" class="article-share-link">
-        <i class="fa fa-share"></i>
-        分享
-    </a>
-    
-    <a href="https://bopo.github.io/2017/04/10/shu-shu-fen-lei/#disqus_thread" class="article-comment-link">
-        评论
-    </a>
-    
-
-    <script>
-    (function ($) {
-        
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-    </script>
-</footer>
-
-    </div>
-</article>
-
-<article class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        </a>
-
-        <header class="article-header">
-    <a href="https://bopo.github.io/2017/04/01/diliquanshu/">
-    <h1 class="article-title" itemprop="name">
-        刘伯温《地理全书》解密, 万物不离阴阳
-    </h1>
-    </a>
-    <div class="article-meta">
-
-        
-        <div class="article-date">
-            <i class="fa fa-calendar"></i>
-            <time datetime="2017-04-01 11:58:06 &#43;0200 &#43;0200" itemprop="datePublished">2017-04-01</time>
-            &middot;
-            15
-            字数
-            &middot;
-            1
-            minute read
-        </div>
-        
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-folder"></i>
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">术数</a>
-                
-                
-            </div>
-            
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4">风水</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E5%88%98%E4%BC%AF%E6%B8%A9">刘伯温</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E8%A7%A3%E5%AF%86">解密</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E5%9C%B0%E7%90%86">地理</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://bopo.github.io/tags/%E9%98%B4%E9%98%B3">阴阳 </a>
-                
-                
-            </div>
-            
-        
-    </div>
-</header>
-
-        <div class="article-entry" itemprop="articleBody">
-            <p>
-                学地理风水，先要熟悉阴阳。 阴阳产生于河图洛书，藏于山川河流之中。 阳气呈现凹形，具有发散的功能；阴气呈现凸形，具有收敛的功能。 阴阳相抱，凹凸相合，是风水的根本。 以人体来比喻，男人虽为阳，但他的玉茎是属于阴的，聚集了男人阳气的精华； 女人虽为阴，但她的产门是属于阳的，具有散发生气的功能。 阳以阴的形式出现；阴以阳的形式生存。 阳的精华是阴； 阴的精华是阳。 本性为阳的事物较为柔弱； 本性为阴的事物较为刚强。 阴阳套嵌的地形，是风水所在。
-辨别阴阳的形势，是学习风水的关键。 阴阳的形势有：开合；仰俯；刚柔；缓急；收放；远近；动静；高低；上下；大小。
-阴阳之气，要用“心”来辨别，眼睛是看不到的。
-            </p>
-            <p class="article-more-link">
-                <a href="https://bopo.github.io/2017/04/01/diliquanshu/">
-                    更多
-                </a>
-            </p>
-        </div>
-        <footer class="article-footer">
-    <a data-url="https://bopo.github.io/2017/04/01/diliquanshu/" data-id="f2526758fae904f8fa804dc4c150e225" class="article-share-link">
-        <i class="fa fa-share"></i>
-        分享
-    </a>
-    
-    <a href="https://bopo.github.io/2017/04/01/diliquanshu/#disqus_thread" class="article-comment-link">
-        评论
-    </a>
-    
-
-    <script>
-    (function ($) {
-        
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-    </script>
-</footer>
-
-    </div>
-</article>
-
 
 <nav id="page-nav">
 
@@ -1776,6 +1766,75 @@ proxy_pass http://backserver/; upstream backserver{ ip_hash; server 127.
     </h3>
     <div class="widget">
         <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" class="title">使用pytest进行测试</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-15 00:55:02 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/15/locust/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://bopo.github.io/categories/python">
+                        python
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/15/locust/" class="title">性能测试：分布式测试</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-15 00:15:33 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/14/python_test_optimization/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://bopo.github.io/categories/python">
+                        python
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/14/python_test_optimization/" class="title">Python Django性能测试与优化</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-14 23:37:30 &#43;0800 CST" itemprop="datePublished">2018-04-14</time>
+                    </p>
+                </div>
+            </li>
             
             <li>
                 <div class="item-thumbnail">
@@ -1820,84 +1879,6 @@ proxy_pass http://backserver/; upstream backserver{ ip_hash; server 127.
                 </div>
             </li>
             
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://bopo.github.io/2017/05/20/carthage_update/" class="thumbnail">
-                    
-                        <span class="thumbnail-image thumbnail-none"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    
-                    <p class="item-category">
-                        
-                        <a class="article-category-link" href="https://bopo.github.io/categories/macos">
-                        macos
-                        </a>
-                    </p>
-                    
-                    
-                    <p class="item-title"><a href="https://bopo.github.io/2017/05/20/carthage_update/" class="title">macos 下 carthage 升级方法</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-05-20 11:58:06 &#43;0200 &#43;0200" itemprop="datePublished">2017-05-20</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://bopo.github.io/2017/05/20/wanwuleixiang/" class="thumbnail">
-                    
-                        <span class="thumbnail-image thumbnail-none"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    
-                    <p class="item-category">
-                        
-                        <a class="article-category-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">
-                        术数
-                        </a>
-                    </p>
-                    
-                    
-                    <p class="item-title"><a href="https://bopo.github.io/2017/05/20/wanwuleixiang/" class="title">八卦万物类象</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-05-20 11:58:06 &#43;0200 &#43;0200" itemprop="datePublished">2017-05-20</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://bopo.github.io/2017/05/20/yan_bo_diao_sou/" class="thumbnail">
-                    
-                        <span class="thumbnail-image thumbnail-none"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    
-                    <p class="item-category">
-                        
-                        <a class="article-category-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">
-                        术数
-                        </a>
-                    </p>
-                    
-                    
-                    <p class="item-title"><a href="https://bopo.github.io/2017/05/20/yan_bo_diao_sou/" class="title">烟波钓叟赋</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-05-20 11:58:06 &#43;0200 &#43;0200" itemprop="datePublished">2017-05-20</time>
-                    </p>
-                </div>
-            </li>
-            
         </ul>
     </div>
 </div>
@@ -1913,6 +1894,14 @@ proxy_pass http://backserver/; upstream backserver{ ip_hash; server 127.
             
             <li class="category-list-item">
                 
+                <a class="category-list-link" href="https://bopo.github.io/categories/locust">
+                    locust
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
                 <a class="category-list-link" href="https://bopo.github.io/categories/macos">
                     macos
                 </a>
@@ -1923,6 +1912,14 @@ proxy_pass http://backserver/; upstream backserver{ ip_hash; server 127.
                 
                 <a class="category-list-link" href="https://bopo.github.io/categories/python">
                     python
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E4%BC%98%E5%8C%96">
+                    优化
                 </a>
                 <span class="category-list-count">1</span>
             </li>
@@ -1945,10 +1942,26 @@ proxy_pass http://backserver/; upstream backserver{ ip_hash; server 127.
             
             <li class="category-list-item">
                 
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B5%8B%E8%AF%95">
+                    分布式测试
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
                 <a class="category-list-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">
                     术数
                 </a>
                 <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E6%B5%8B%E8%AF%95">
+                    测试
+                </a>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -1997,7 +2010,7 @@ proxy_pass http://backserver/; upstream backserver{ ip_hash; server 127.
                 <a class="category-list-link" href="https://bopo.github.io/tags/python">
                     python
                 </a>
-                <span class="category-list-count">1</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">

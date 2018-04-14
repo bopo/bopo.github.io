@@ -6,10 +6,61 @@
     <description>Recent content on BoPo的备忘录</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Thu, 12 Apr 2018 11:29:11 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 15 Apr 2018 00:55:02 +0800</lastBuildDate>
     
 	<atom:link href="https://bopo.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用pytest进行测试</title>
+      <link>https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/</link>
+      <pubDate>Sun, 15 Apr 2018 00:55:02 +0800</pubDate>
+      
+      <guid>https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/</guid>
+      <description>简介 pytest:帮助你写出更好的程序：
+ 开源，免费。 升级pytest,严格的向后兼容性。 丰富的第三方插件。 内置assert断言。  环境配置 pip install -U pytest # or easy_install -U pytest  查看版本 py.test --version  也许你已经使用unittest和doctest写了很多的测试用例了，不过你可以直接使用pytest运行他们。
+打印结果 pytest在通过测试时会忽略中间的print信息。要打印则需要assert为false,打印好看用json来格式化下：
+import json print json.dumps(posts_local, indent=4) assert False  也可以使用pprint.pprint()
+pytest fixtures fixture可以声明function,module,fixture。也可以使用xunit的fixture的格式，setup和teardown。使用fixtures作为function的参数使用。
+分类 像unittest有setup和teardown固定装置，pytest扩展了该功能。
+ 模块的固定装置：setup_module/teardown_module 类的固定装置：setup_class/teardown_class 可替代的类级别的固定装置：setup/teardown Module级别方法装置:setup_function Class级别方法装置:setup_method  pytest_fixtrue.py
+def setup_module() def teardown_module() def setup_function() def teardown_funcion() def module_funtion() class class_name: def setup() def teardown() def setup_class() def teardown_class() def setup_method() def teardown_method() def class_function()  运行后，执行顺序：</description>
+    </item>
+    
+    <item>
+      <title>性能测试：分布式测试</title>
+      <link>https://bopo.github.io/2018/04/15/locust/</link>
+      <pubDate>Sun, 15 Apr 2018 00:15:33 +0800</pubDate>
+      
+      <guid>https://bopo.github.io/2018/04/15/locust/</guid>
+      <description>分布式运行Locust 一旦单台机器不够模拟足够多的用户时，Locust支持运行在多台机器中进行压力测试。
+为了实现这个，你应该在master模式中使用&amp;ndash;master标记来启用一个Locust实例。这个实例将会运行你启动测试的Locust交互网站并查看实时统计数据。master节点的机器自身不会模拟任何用户。相反，你必须使用&amp;ndash;slave标记启动一台到多台Locustslave机器节点，与标记&amp;ndash;master-host一起使用(指出master机器的IP/hostname)。
+常用的做法是在一台独立的机器中运行master，在slave机器中每个处理器内核运行一个slave实例。
+!Note
+master和每一台slave机器，在运行分布式测试时都必须要有locust的测试文件。
+示例 使用master模式启动:
+locust -f my_loucstfile.py --master  在每个slave中执行(使用master机器的IP替换192.168.0.14):
+locust -f my_locustfile.py --slave --master-host=192.168.0.14  参数 --master 设置locust为master模式。网页交互会在这台节点机器中运行。
+--slave 设置locust为slave模式。
+--master-host=X.X.X.X 可选项，与&amp;ndash;slave一起结合使用，用于设置master模式下的master机器的IP/hostname(默认设置为127.0.0.1)
+--master-port=5557 可选项，与&amp;ndash;slave一起结合使用，用于设置master模式下的master机器中Locust的端口(默认为5557)。注意，locust将会使用这个指定的端口号，同时指定端口+1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。
+--master-bind-host=X.X.X.X 可选项，与&amp;ndash;master一起结合使用。决定在master模式下将会绑定什么网络接口。默认设置为*(所有可用的接口)。
+--master-bind-port=5557 可选项，与--master一起结合使用。决定哪个网络端口master模式将会监听。默认设置为5557。注意Locust会使用指定的端口号，同时指定端口+1的号也会被占用。因此，5557会被使用，Locust将会使用5557和5558。</description>
+    </item>
+    
+    <item>
+      <title>Python Django性能测试与优化</title>
+      <link>https://bopo.github.io/2018/04/14/python_test_optimization/</link>
+      <pubDate>Sat, 14 Apr 2018 23:37:30 +0800</pubDate>
+      
+      <guid>https://bopo.github.io/2018/04/14/python_test_optimization/</guid>
+      <description>原文：A Guide to Performance Testing and Optimization With Python and Django 作者：IULIAN GULEA 翻译：雁惊寒
+ 本文通过一个简单的实例一步一步引导读者对其进行全方位的性能优化。以下是译文。
+ &amp;emsp;&amp;emsp;&amp;ensp;唐纳德·克努特（Donald Knuth）曾经说过：“不成熟的优化方案是万恶之源。”然而，任何一个承受高负载的成熟项目都不可避免地需要进行优化。在本文中，我想谈谈优化Web项目代码的五种常用方法。虽然本文是以Django为例，但其他框架和语言的优化原则也是类似的。通过使用这些优化方法，文中例程的查询响应时间从原来的77秒减少到了3.7秒。
+本文用到的例程是从一个我曾经使用过的真实项目改编而来的，是性能优化技巧的典范。如果你想自己尝试着进行优化，可以在GitHub上获取优化前的初始代码，并跟着下文做相应的修改。我使用的是Python 2，因为一些第三方软件包还不支持Python 3。
+示例代码介绍 这个Web项目只是简单地跟踪每个地区的房产价格。因此，只有两种模型：
+# houses/models.py from utils.hash import Hasher class HashableModel(models.Model): &amp;quot;&amp;quot;&amp;quot;Provide a hash property for models.&amp;quot;&amp;quot;&amp;quot; class Meta: abstract = True @property def hash(self): return Hasher.from_model(self) class Country(HashableModel): &amp;quot;&amp;quot;&amp;quot;Represent a country in which the house is positioned.&amp;quot;&amp;quot;&amp;quot; name = models.CharField(max_length=30) def __unicode__(self): return self.name class House(HashableModel): &amp;quot;&amp;quot;&amp;quot;Represent a house with its characteristics.</description>
+    </item>
     
     <item>
       <title>nginx负载均衡的5种策略（转载）</title>

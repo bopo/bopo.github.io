@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>使用pytest进行测试 &middot; BoPo的备忘录</title>
+    <meta name="generator" content="Hugo 0.38.2" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="BoPo">
+    
+      <meta name="description" content="">
+    
+    
+    <link rel="canonical" href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/"/>
+    <link rel="icon" href="https://bopo.github.io/favicon.ico">
+    <link rel="apple-touch-icon" href="https://bopo.github.io/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="https://bopo.github.io/css/style.css">
+    <link rel="stylesheet" href="https://bopo.github.io/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://bopo.github.io/css/monokai.css">
+    <link rel="stylesheet" href="https://bopo.github.io/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="使用pytest进行测试" />
+<meta property="og:description" content="简介 pytest:帮助你写出更好的程序：
+ 开源，免费。 升级pytest,严格的向后兼容性。 丰富的第三方插件。 内置assert断言。  环境配置 pip install -U pytest # or easy_install -U pytest  查看版本 py.test --version  也许你已经使用unittest和doctest写了很多的测试用例了，不过你可以直接使用pytest运行他们。
+打印结果 pytest在通过测试时会忽略中间的print信息。要打印则需要assert为false,打印好看用json来格式化下：
+import json print json.dumps(posts_local, indent=4) assert False  也可以使用pprint.pprint()
+pytest fixtures fixture可以声明function,module,fixture。也可以使用xunit的fixture的格式，setup和teardown。使用fixtures作为function的参数使用。
+分类 像unittest有setup和teardown固定装置，pytest扩展了该功能。
+ 模块的固定装置：setup_module/teardown_module 类的固定装置：setup_class/teardown_class 可替代的类级别的固定装置：setup/teardown Module级别方法装置:setup_function Class级别方法装置:setup_method  pytest_fixtrue.py
+def setup_module() def teardown_module() def setup_function() def teardown_funcion() def module_funtion() class class_name: def setup() def teardown() def setup_class() def teardown_class() def setup_method() def teardown_method() def class_function()  运行后，执行顺序：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" />
+
+
+
+<meta property="article:published_time" content="2018-04-15T00:55:02&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-04-15T00:55:02&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="使用pytest进行测试">
+<meta itemprop="description" content="简介 pytest:帮助你写出更好的程序：
+ 开源，免费。 升级pytest,严格的向后兼容性。 丰富的第三方插件。 内置assert断言。  环境配置 pip install -U pytest # or easy_install -U pytest  查看版本 py.test --version  也许你已经使用unittest和doctest写了很多的测试用例了，不过你可以直接使用pytest运行他们。
+打印结果 pytest在通过测试时会忽略中间的print信息。要打印则需要assert为false,打印好看用json来格式化下：
+import json print json.dumps(posts_local, indent=4) assert False  也可以使用pprint.pprint()
+pytest fixtures fixture可以声明function,module,fixture。也可以使用xunit的fixture的格式，setup和teardown。使用fixtures作为function的参数使用。
+分类 像unittest有setup和teardown固定装置，pytest扩展了该功能。
+ 模块的固定装置：setup_module/teardown_module 类的固定装置：setup_class/teardown_class 可替代的类级别的固定装置：setup/teardown Module级别方法装置:setup_function Class级别方法装置:setup_method  pytest_fixtrue.py
+def setup_module() def teardown_module() def setup_function() def teardown_funcion() def module_funtion() class class_name: def setup() def teardown() def setup_class() def teardown_class() def setup_method() def teardown_method() def class_function()  运行后，执行顺序：">
+
+
+<meta itemprop="datePublished" content="2018-04-15T00:55:02&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T00:55:02&#43;08:00" />
+<meta itemprop="wordCount" content="487">
+
+
+
+<meta itemprop="keywords" content="" />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用pytest进行测试"/>
+<meta name="twitter:description" content="简介 pytest:帮助你写出更好的程序：
+ 开源，免费。 升级pytest,严格的向后兼容性。 丰富的第三方插件。 内置assert断言。  环境配置 pip install -U pytest # or easy_install -U pytest  查看版本 py.test --version  也许你已经使用unittest和doctest写了很多的测试用例了，不过你可以直接使用pytest运行他们。
+打印结果 pytest在通过测试时会忽略中间的print信息。要打印则需要assert为false,打印好看用json来格式化下：
+import json print json.dumps(posts_local, indent=4) assert False  也可以使用pprint.pprint()
+pytest fixtures fixture可以声明function,module,fixture。也可以使用xunit的fixture的格式，setup和teardown。使用fixtures作为function的参数使用。
+分类 像unittest有setup和teardown固定装置，pytest扩展了该功能。
+ 模块的固定装置：setup_module/teardown_module 类的固定装置：setup_class/teardown_class 可替代的类级别的固定装置：setup/teardown Module级别方法装置:setup_function Class级别方法装置:setup_method  pytest_fixtrue.py
+def setup_module() def teardown_module() def setup_function() def teardown_funcion() def module_funtion() class class_name: def setup() def teardown() def setup_class() def teardown_class() def setup_method() def teardown_method() def class_function()  运行后，执行顺序："/>
+
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="https://bopo.github.io/" id="logo">
+          
+          <i class="logo" style="background-image: url('https://bopo.github.io/css/images/logo.png')"></i>
+          
+          <span class="site-title">BoPo的备忘录</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="https://bopo.github.io/">首页</a>
+          
+          
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/about/">关于</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="https://bopo.github.io/tags/">标签</a>
+          
+          
+          
+          <a class="main-nav-link" href="https://bopo.github.io/categories/">类别</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://avatars1.githubusercontent.com/u/77651?s=460&amp;v=4"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="搜索">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="https://bopo.github.io/" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="https://bopo.github.io/">首页</a></td>
+          
+          
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/about/">关于</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="https://bopo.github.io/tags/">标签</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="https://bopo.github.io/categories/">类别</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="https://bopo.github.io/" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+      <img id="avatar" src="https://avatars1.githubusercontent.com/u/77651?s=460&amp;v=4">
+      
+      <h2 id="name">BoPo</h2>
+      
+      <span id="location"><i class="fa fa-map-marker"></i>中国</span>
+      
+          <a id="follow" href="https://github.com/bopo">
+              关注
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        16
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          14
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/bopo" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <td><a href="https://bopo.github.io/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+
+        <header class="article-header">
+    <a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/">
+    <h1 class="article-title" itemprop="name">
+        使用pytest进行测试
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-04-15 00:55:02 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+            &middot;
+            487
+            字数
+            &middot;
+            3
+            minute read
+        </div>
+        
+        
+
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+
+<h2 id="简介">简介</h2>
+
+<p>pytest:帮助你写出更好的程序：</p>
+
+<ul>
+<li>开源，免费。</li>
+<li>升级pytest,严格的向后兼容性。</li>
+<li>丰富的第三方插件。</li>
+<li>内置assert断言。</li>
+</ul>
+
+<h2 id="环境配置">环境配置</h2>
+
+<pre><code>pip install -U pytest
+# or
+easy_install -U pytest
+</code></pre>
+
+<h2 id="查看版本">查看版本</h2>
+
+<pre><code>py.test --version
+
+</code></pre>
+
+<p>也许你已经使用unittest和doctest写了很多的测试用例了，不过你可以直接使用pytest运行他们。</p>
+
+<h2 id="打印结果">打印结果</h2>
+
+<p>pytest在通过测试时会忽略中间的print信息。要打印则需要assert为false,打印好看用json来格式化下：</p>
+
+<pre><code>import json
+print json.dumps(posts_local, indent=4)
+        assert False
+</code></pre>
+
+<p>也可以使用pprint.pprint()</p>
+
+<h2 id="pytest-fixtures">pytest fixtures</h2>
+
+<p>fixture可以声明function,module,fixture。也可以使用xunit的fixture的格式，setup和teardown。使用fixtures作为function的参数使用。</p>
+
+<h2 id="分类">分类</h2>
+
+<p>像unittest有setup和teardown固定装置，pytest扩展了该功能。</p>
+
+<ol>
+<li>模块的固定装置：setup_module/teardown_module</li>
+<li>类的固定装置：setup_class/teardown_class</li>
+<li>可替代的类级别的固定装置：setup/teardown</li>
+<li>Module级别方法装置:setup_function</li>
+<li>Class级别方法装置:setup_method</li>
+</ol>
+
+<p>pytest_fixtrue.py</p>
+
+<pre><code>def setup_module()
+def teardown_module()
+def setup_function()
+def teardown_funcion()
+def module_funtion()
+
+class class_name:
+    def setup()
+    def teardown()
+    def setup_class()
+    def teardown_class()
+    def setup_method()
+    def teardown_method()
+    def class_function()
+</code></pre>
+
+<p>运行后，执行顺序：</p>
+
+<pre><code>setup_module()
+setup_function()
+module_function()
+teardown_funtion()
+setup_class()
+setup_method()
+setup()
+class_function()
+teardown()
+teardown_method()
+teardown_class()
+teardown_module()
+</code></pre>
+
+<p>需要哪些装置写哪些。</p>
+
+<h3 id="fixture参数scope">fixture参数scope</h3>
+
+<p>scope控制fixtrue调用的频率，默认是function。可选的有：</p>
+
+<ul>
+<li>function：每个测试函数之前执行一次</li>
+<li>class：每个测试类之前执行一次</li>
+<li>module：每个module之前执行一次</li>
+<li>session：每次session之前执行一次，即每次测试执行一次</li>
+</ul>
+
+<h3 id="fixture参数request">fixture参数Request</h3>
+
+<p>使用request参数，当要添加finilizer到fixture中。
+相当于pytest内置的一个fixture，需要传递给fixture，才能识别finilizer。</p>
+
+<pre><code>def test_data(request):
+  ......
+</code></pre>
+
+<h3 id="fixture参数params">fixture参数params</h3>
+
+<pre><code>@pytest.fixture( params=[1,2,3] )
+def test_data(request):
+    return request.param def test_not_2(test_data):
+    print('test_data: %s' % test_data)
+    assert test_data != 2
+</code></pre>
+
+<p>依次循环传入params中的每个值作为参数。</p>
+
+<h2 id="参数化方法">参数化方法</h2>
+
+<p>pytest支持在多个完整测试参数化方法:</p>
+
+<ol>
+<li>pytest.fixture(): 在fixture级别的function处参数化</li>
+<li>@pytest.mark.parametrize：允许在function或class级别的参数化,为特定的测试函数或类提供了多个argument/fixture设置。</li>
+<li>pytest_generate_tests：可以实现自己的自定义动态参数化方案或扩展。</li>
+</ol>
+
+<h3 id="pytest-mark-parametrize">@pytest.mark.parametrize</h3>
+
+<p>内建的pytest.mark.parametrize装饰器可以参数化测试函数的参数。</p>
+
+<pre><code>import pytest 
+@pytest.mark.parametrize(&quot;test_input,expected&quot;, [
+(&quot;3+5&quot;, 8), 
+(&quot;2+4&quot;, 6), 
+(&quot;6*9&quot;, 42), 
+])
+def test_eval(test_input, expected):
+    assert eval(test_input) == expected
+</code></pre>
+
+<h3 id="在module-class-session件share一个fixture">在module/class/session件share一个fixture)</h3>
+
+<pre><code>def test_ehlo(smtp):
+    response, msg = smtp.ehlo()
+    assert response == 250
+    assert b&quot;smtp.gmail.com&quot; in msg
+    assert 0 # for demo purposes
+
+def test_noop(smtp):
+    response, msg = smtp.noop()
+    assert response == 250
+    assert 0 # for demo purposes
+</code></pre>
+
+<p>共享一个smtp实例。</p>
+
+<h3 id="fixture终止-执行teardown">fixture终止/执行teardown</h3>
+
+<p>当最后一个需要fixture的test执行结束后，可指定执行终止的代码。可以传递一个request作为参数，在结束后回调fin函数</p>
+
+<pre><code>request.addfinalizer(fin)
+</code></pre>
+
+<p>fin为自定义的回调函数。</p>
+
+<h2 id="运行测试">运行测试</h2>
+
+<p>pytest将运行所有在当前目录及其子目录的<code>test_.py</code> or <code>_test.py</code>.形式。遵循标准测试发现test discovery规则。</p>
+
+<p>组织测试：当有许多的测试用例了，注意使用class或者module组织测试用例。</p>
+
+<pre><code>python -m pytest [...]
+
+或者
+
+py.test [...]
+</code></pre>
+
+<h3 id="查看选项名称-环境变量">查看选项名称,环境变量</h3>
+
+<pre><code>py.test --fixtures  # show available builtin function arguments
+py.test -h | --help # show help on command line and config file options
+</code></pre>
+
+<h3 id="选择要运行的测试">选择要运行的测试</h3>
+
+<pre><code>pytest test_mod.py   # 运行test_mod.py所有测试
+pytest somepath      #运行某个路径下的所有测试
+pytest -k stringexpr # 运行匹配stringexpr的测试函数
+pytest test_mod.py::test_func  # 运行test_mod.py模块中的test_func测试函数
+pytest test_mod.py::TestClass::test_method  # TestClass类下的test_method测试方法
+</code></pre>
+
+<h3 id="忽略查找路径-ingore">忽略查找路径 &ndash;ingore</h3>
+
+<pre><code>tests/
+|-- example
+|   |-- test_example_01.py
+|   |-- test_example_02.py
+|   '-- test_example_03.py
+|-- foobar
+|   |-- test_foobar_01.py
+|   |-- test_foobar_02.py
+|   '-- test_foobar_03.py
+'-- hello
+    '-- world
+        |-- test_world_01.py
+        |-- test_world_02.py
+        '-- test_world_03.py
+</code></pre>
+
+<p>忽略 test_footbar_03.py</p>
+
+<pre><code>--ignore=tests/foobar/test_foobar_03.py
+
+</code></pre>
+
+<p>忽略 整个hello目录</p>
+
+<pre><code>--ignore=tests/hello/
+
+</code></pre>
+
+<h3 id="修改python的trace输出">修改Python的trace输出</h3>
+
+<pre><code>py.test --showlocals # show local variables in tracebacks
+py.test -l           # show local variables (shortcut)
+py.test --tb=auto    # (default) 'long' tracebacks for the first and last
+                     # entry, but 'short' style for the other entries
+py.test --tb=long    # exhaustive, informative traceback formatting
+py.test --tb=short   # shorter traceback format
+py.test --tb=line    # only one line per failure
+py.test --tb=native  # Python standard library formatting
+py.test --tb=no      # no traceback at all
+</code></pre>
+
+<h3 id="请求一个唯一的临时目录">请求一个唯一的临时目录</h3>
+
+<pre><code>def test_needsfiles(tmpdir):
+ print (tmpdir)
+ assert 0
+</code></pre>
+
+<p>pytest会寻找并创建一个fixture在调用其他test方法时。
+在每个测试方法前面创建一个临时的目录。
+查看内建的fixture：</p>
+
+<pre><code>py.test --fixtures # shows builtin and custom fixtures
+
+</code></pre>
+
+<h3 id="处理失败">处理失败</h3>
+
+<p>使用-r可以查看skips和xfails的详细信息。</p>
+
+<p>Skip
+预期测试能通过，除非环境(如：错误的python解释器，缺少依赖)阻止其不能正常的运行。</p>
+
+<h4 id="跳过一个测试函数">跳过一个测试函数</h4>
+
+<p>通过skip装饰器：</p>
+
+<pre><code>@pytest.mark.skip(reason=&quot;no way of currently testing this&quot;)
+def test_the_unknown():
+    ...
+</code></pre>
+
+<h4 id="设置跳过测试的条件">设置跳过测试的条件</h4>
+
+<p>小于python3.3解释器运行时，跳过：</p>
+
+<pre><code>import sys
+@pytest.mark.skipif(sys.version_info &lt; (3,3),
+                    reason=&quot;requires python3.3&quot;)
+def test_function():
+    ...
+</code></pre>
+
+<h3 id="在module之间共享跳过条件">在module之间共享跳过条件</h3>
+
+<pre><code># content of test_mymodule.py
+import mymodule
+minversion = pytest.mark.skipif(mymodule.__versioninfo__ &lt; (1,1),
+                                reason=&quot;at least mymodule-1.1 required&quot;)
+@minversion
+def test_function():
+    ...
+</code></pre>
+
+<h3 id="导入跳过">导入跳过</h3>
+
+<pre><code># test_myothermodule.py
+from test_mymodule import minversion
+@minversion
+def test_anotherfunction():
+    ...
+</code></pre>
+
+<p>对于大型测试套件是一个好主意,有一个文件,你定义的标记然后一直应用在整个测试套件。</p>
+
+<p>跳过一个类的所有测试函数或模块
+在类上使用skipif ：</p>
+
+<pre><code>@pytest.mark.skipif(sys.platform == 'win32',
+                    reason=&quot;does not run on windows&quot;)
+class TestPosixCalls:
+    def test_function(self):
+        &quot;will not be setup or run under 'win32' platform&quot;
+</code></pre>
+
+<p>跳过所有测试方法：在global level使用pytestmark 名称</p>
+
+<pre><code># test_module.py
+pytestmark = pytest.mark.skipif(...)
+
+</code></pre>
+
+<p>xfail
+测试可以运行，但是你期望其失败，因为有实现上的问题。</p>
+
+<pre><code>def xfail(condition=None, *, reason=None, raises=None, run=True, strict=False):
+</code></pre>
+
+<p>一个测试函数标记为失败
+使用xfail marker：</p>
+
+<pre><code>@pytest.mark.xfail
+def test_function():
+    ...
+</code></pre>
+
+<p>这样，会运行该测试，但失败了无输出信息。</p>
+
+<p>设定失败的理由</p>
+
+<pre><code>def test_hello6():
+    pytest.xfail(&quot;reason&quot;)
+
+</code></pre>
+
+<h2 id="测试报告">测试报告</h2>
+
+<p>pytest可以方便的生成测试报告，即可以生成HTML的测试报告，也可以生成XML格式的测试报告用来与持续集成工具集成。</p>
+
+<p>生成HTML格式报告：</p>
+
+<pre><code>py.test --resultlog=path
+
+</code></pre>
+
+<p>生成XML格式的报告：</p>
+
+<pre><code>py.test --junitxml=path
+
+</code></pre>
+
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" data-id="3c9846c5da636b69e21e896f963cb184" class="article-share-link">
+        <i class="fa fa-share"></i>
+        分享
+    </a>
+    
+    <a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/#disqus_thread" class="article-comment-link">
+        评论
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+
+    
+<nav id="article-nav">
+    
+    <a href="https://bopo.github.io/2018/04/15/locust/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          更早
+      </strong>
+      <div class="article-nav-title">性能测试：分布式测试</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "BoPo" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
+    </section>
+
+   	
+    	<aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        最近
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/15/%E4%BD%BF%E7%94%A8pytest%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" class="title">使用pytest进行测试</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-15 00:55:02 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/15/locust/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://bopo.github.io/categories/python">
+                        python
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/15/locust/" class="title">性能测试：分布式测试</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-15 00:15:33 &#43;0800 CST" itemprop="datePublished">2018-04-15</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/14/python_test_optimization/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://bopo.github.io/categories/python">
+                        python
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/14/python_test_optimization/" class="title">Python Django性能测试与优化</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-14 23:37:30 &#43;0800 CST" itemprop="datePublished">2018-04-14</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/12/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%845%E7%A7%8D%E7%AD%96%E7%95%A5%E8%BD%AC%E8%BD%BD/" class="title">nginx负载均衡的5种策略（转载）</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-12 11:29:11 &#43;0800 CST" itemprop="datePublished">2018-04-12</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://bopo.github.io/2018/04/10/python_fn/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    <p class="item-category">
+                        
+                        <a class="article-category-link" href="https://bopo.github.io/categories/python">
+                        python
+                        </a>
+                    </p>
+                    
+                    
+                    <p class="item-title"><a href="https://bopo.github.io/2018/04/10/python_fn/" class="title">Python函数式编程：从入门到走火入魔</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-04-10 11:57:24 &#43;0800 CST" itemprop="datePublished">2018-04-10</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/locust">
+                    locust
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/macos">
+                    macos
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/python">
+                    python
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E4%BC%98%E5%8C%96">
+                    优化
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E4%BC%A0%E7%BB%9F%E6%96%87%E5%8C%96">
+                    传统文化
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B">
+                    函数式编程
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B5%8B%E8%AF%95">
+                    分布式测试
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E6%9C%AF%E6%95%B0">
+                    术数
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E6%B5%8B%E8%AF%95">
+                    测试
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E8%A7%A3%E8%AF%BB">
+                    解读
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/categories/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93">
+                    量化交易
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/carthage">
+                    carthage
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E5%85%AB%E5%8D%A6%E4%B8%87%E7%89%A9%E7%B1%BB%E8%B1%A1">
+                    八卦万物类象
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E5%88%98%E4%BC%AF%E6%B8%A9">
+                    刘伯温
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E5%9C%B0%E7%90%86">
+                    地理
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E5%A5%87%E9%97%A8%E9%81%81%E7%94%B2">
+                    奇门遁甲
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E6%9C%AF%E6%95%B0">
+                    术数
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E7%B1%BB%E8%B1%A1">
+                    类象
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E7%BB%8F%E5%85%B8%E4%BB%B7%E5%80%BC%E6%8A%95%E8%B5%84%E6%B3%95">
+                    经典价值投资法
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E8%80%81%E5%AD%90">
+                    老子
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E8%A7%A3%E5%AF%86">
+                    解密
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E9%98%B4%E9%98%B3">
+                    阴阳
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4">
+                    风水
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4%E5%8C%96%E7%85%9E">
+                    风水化煞
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        标签云
+    </h3>
+    <div class="widget tagcloud">
+        
+        
+        <a href="https://bopo.github.io/tags/carthage" style="font-size: 12px;">carthage</a>
+        
+        
+        <a href="https://bopo.github.io/tags/python" style="font-size: 12px;">python</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E5%85%AB%E5%8D%A6%E4%B8%87%E7%89%A9%E7%B1%BB%E8%B1%A1" style="font-size: 12px;">八卦万物类象</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E5%88%98%E4%BC%AF%E6%B8%A9" style="font-size: 12px;">刘伯温</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E5%9C%B0%E7%90%86" style="font-size: 12px;">地理</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E5%A5%87%E9%97%A8%E9%81%81%E7%94%B2" style="font-size: 12px;">奇门遁甲</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E6%9C%AF%E6%95%B0" style="font-size: 12px;">术数</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E7%B1%BB%E8%B1%A1" style="font-size: 12px;">类象</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E7%BB%8F%E5%85%B8%E4%BB%B7%E5%80%BC%E6%8A%95%E8%B5%84%E6%B3%95" style="font-size: 12px;">经典价值投资法</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E8%80%81%E5%AD%90" style="font-size: 12px;">老子</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E8%A7%A3%E5%AF%86" style="font-size: 12px;">解密</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E9%98%B4%E9%98%B3" style="font-size: 12px;">阴阳</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4" style="font-size: 12px;">风水</a>
+        
+        
+        <a href="https://bopo.github.io/tags/%E9%A3%8E%E6%B0%B4%E5%8C%96%E7%85%9E" style="font-size: 12px;">风水化煞</a>
+        
+    </div>
+</div>
+
+
+
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018
+      Powered by BoPo.
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://bopo.github.io/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://bopo.github.io/js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+</body>
+</html>
